@@ -1,57 +1,61 @@
 
 <style>
+/* Claude / Anthropic design language: warm ivory & dark grounds, Claude coral
+   accent, serif display + monospace utility labels. */
 :root{
-  --bg:#eef1f7; --card:#ffffff; --card2:#f7f9fc; --fg:#0f1a33; --muted:#5b6577;
-  --line:#e1e6f0; --blue:#1b3fa0; --blue-soft:#dbe3fb; --gold:#c6871a;
-  --good:#1f9d57; --warn:#c98a12; --pitch1:#2f7d57; --pitch2:#276a49;
-  --shadow:0 1px 2px rgba(15,26,51,.06),0 8px 24px rgba(15,26,51,.06);
-  --radius:16px; --maxw:1120px;
+  --bg:#f0eee6; --card:#faf9f5; --card2:#eae7dc; --fg:#1a1915; --muted:#73706a;
+  --line:#e3dfd3; --accent:#c15f3c; --accent-soft:#f2e2da; --accent2:#8a8a72;
+  --good:#5f7a4f; --warn:#b0742a; --pitch1:#586b4c; --pitch2:#4c5d41;
+  --shadow:0 1px 2px rgba(26,25,21,.05),0 10px 28px rgba(26,25,21,.07);
+  --radius:14px; --maxw:1120px;
+  --serif:ui-serif,"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
 }
 @media (prefers-color-scheme:dark){:root{
-  --bg:#0a1122; --card:#121c34; --card2:#0f1830; --fg:#eaeefb; --muted:#93a0bd;
-  --line:#22304f; --blue:#6f92ff; --blue-soft:#1b294b; --gold:#f0b93f;
-  --good:#37c47f; --warn:#f0b93f; --pitch1:#1f5c40; --pitch2:#184a34;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  --bg:#262624; --card:#30302e; --card2:#242422; --fg:#f0eee6; --muted:#a8a49a;
+  --line:#413f3a; --accent:#e0876a; --accent-soft:#3a2c25; --accent2:#b0b096;
+  --good:#93b184; --warn:#e0a05a; --pitch1:#3b4a37; --pitch2:#31402e;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.4);
 }}
 :root[data-theme="light"]{
-  --bg:#eef1f7; --card:#ffffff; --card2:#f7f9fc; --fg:#0f1a33; --muted:#5b6577;
-  --line:#e1e6f0; --blue:#1b3fa0; --blue-soft:#dbe3fb; --gold:#c6871a;
-  --good:#1f9d57; --warn:#c98a12; --pitch1:#2f7d57; --pitch2:#276a49;
-  --shadow:0 1px 2px rgba(15,26,51,.06),0 8px 24px rgba(15,26,51,.06);
+  --bg:#f0eee6; --card:#faf9f5; --card2:#eae7dc; --fg:#1a1915; --muted:#73706a;
+  --line:#e3dfd3; --accent:#c15f3c; --accent-soft:#f2e2da; --accent2:#8a8a72;
+  --good:#5f7a4f; --warn:#b0742a; --pitch1:#586b4c; --pitch2:#4c5d41;
+  --shadow:0 1px 2px rgba(26,25,21,.05),0 10px 28px rgba(26,25,21,.07);
 }
 :root[data-theme="dark"]{
-  --bg:#0a1122; --card:#121c34; --card2:#0f1830; --fg:#eaeefb; --muted:#93a0bd;
-  --line:#22304f; --blue:#6f92ff; --blue-soft:#1b294b; --gold:#f0b93f;
-  --good:#37c47f; --warn:#f0b93f; --pitch1:#1f5c40; --pitch2:#184a34;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  --bg:#262624; --card:#30302e; --card2:#242422; --fg:#f0eee6; --muted:#a8a49a;
+  --line:#413f3a; --accent:#e0876a; --accent-soft:#3a2c25; --accent2:#b0b096;
+  --good:#93b184; --warn:#e0a05a; --pitch1:#3b4a37; --pitch2:#31402e;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
 .bf-root{
   background:var(--bg); color:var(--fg); min-height:100vh;
-  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  line-height:1.5; -webkit-font-smoothing:antialiased;
+  font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;
 }
 .bf-root *{font-variant-numeric:tabular-nums}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:clamp(16px,3vw,32px)}
-.eyebrow{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:700}
-h1,h2,h3{margin:0; text-wrap:balance; letter-spacing:-.01em}
+.eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600}
+h1,h2,h3{margin:0; text-wrap:balance; letter-spacing:-.01em; font-family:var(--serif); font-weight:600}
 .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
 .section{margin-top:clamp(20px,3.5vw,40px)}
 .section-h{display:flex; align-items:baseline; gap:12px; margin-bottom:14px}
-.section-h h2{font-size:clamp(18px,2.4vw,23px); font-weight:800}
+.section-h h2{font-size:clamp(19px,2.4vw,24px); font-weight:600}
 .section-h .note{color:var(--muted); font-size:13px}
 
 /* header */
 header.top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .brand{display:flex; align-items:center; gap:14px}
 .crest{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
-  background:linear-gradient(135deg,var(--blue),color-mix(in srgb,var(--blue) 60%,#000));
-  color:#fff;font-weight:900;font-size:20px;letter-spacing:-.03em;box-shadow:var(--shadow)}
-.brand h1{font-size:clamp(20px,2.6vw,26px); font-weight:900}
-.brand p{margin:2px 0 0; color:var(--muted); font-size:13px}
+  background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 62%,#000));
+  color:#fff;font-weight:800;font-size:19px;letter-spacing:-.03em;box-shadow:var(--shadow);font-family:var(--serif)}
+.brand h1{font-size:clamp(21px,2.6vw,27px); font-weight:600}
+.brand p{margin:3px 0 0; color:var(--muted); font-size:13px; font-family:var(--mono); letter-spacing:.01em}
 .toggle{border:1px solid var(--line); background:var(--card); color:var(--fg);
-  border-radius:999px; padding:8px 14px; font-size:13px; cursor:pointer; font-weight:600}
-.toggle:hover{border-color:var(--blue)}
+  border-radius:999px; padding:8px 14px; font-size:12px; cursor:pointer; font-weight:600; font-family:var(--mono)}
+.toggle:hover{border-color:var(--accent)}
 
 /* hero */
 .hero{display:grid; grid-template-columns:minmax(260px,360px) 1fr; gap:18px; margin-top:22px}
@@ -59,15 +63,15 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
 .gauge-card{padding:22px; display:flex; flex-direction:column; align-items:center; text-align:center}
 .gauge-wrap{position:relative; width:210px; height:210px}
 .gauge-num{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center}
-.gauge-num b{font-size:44px; font-weight:900; letter-spacing:-.03em; line-height:1}
+.gauge-num b{font-family:var(--serif); font-size:46px; font-weight:500; letter-spacing:-.02em; line-height:1}
 .gauge-num span{color:var(--muted); font-size:12px; margin-top:4px}
 .gauge-sub{margin-top:14px; font-size:13px; color:var(--muted)}
 .gauge-sub b{color:var(--fg)}
 .tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
 @media(max-width:520px){.tiles{grid-template-columns:repeat(2,1fr)}}
 .tile{padding:16px}
-.tile .k{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700}
-.tile .v{font-size:26px; font-weight:800; margin-top:6px; letter-spacing:-.02em}
+.tile .k{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600}
+.tile .v{font-family:var(--serif); font-size:27px; font-weight:500; margin-top:6px; letter-spacing:-.01em}
 .tile .s{font-size:12px; color:var(--muted); margin-top:2px}
 .route{grid-column:1/-1; padding:16px 18px; display:flex; gap:22px; flex-wrap:wrap; align-items:center}
 .route .rt{display:flex; flex-direction:column; gap:6px; min-width:150px; flex:1}
@@ -88,11 +92,11 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
 .pline{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; position:relative; z-index:1}
 .pline .rowlab{position:absolute; left:8px; top:-2px; font-size:10px; letter-spacing:.12em; color:rgba(255,255,255,.65); font-weight:700}
 .shirt{border:none; cursor:pointer; background:transparent; display:flex; flex-direction:column; align-items:center; gap:4px; width:74px; padding:4px}
-.disc{border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:800;
-  background:linear-gradient(135deg,#fff,#e9eefc); color:var(--blue);
-  border:2px solid rgba(255,255,255,.9); box-shadow:0 4px 10px rgba(0,0,0,.25); transition:transform .12s}
+.disc{border-radius:50%; display:grid; place-items:center; font-weight:700; font-family:var(--mono);
+  background:linear-gradient(135deg,#fbfaf5,#f0e7dd); color:#7a3f28;
+  border:2px solid rgba(255,255,255,.85); box-shadow:0 4px 10px rgba(0,0,0,.28); transition:transform .12s}
 .shirt:hover .disc,.shirt:focus-visible .disc{transform:translateY(-3px) scale(1.05)}
-.shirt.pen .disc{outline:2px solid var(--gold); outline-offset:2px}
+.shirt.pen .disc{outline:2px solid var(--accent); outline-offset:2px}
 .shirt .nm{color:#fff; font-size:11px; font-weight:700; text-shadow:0 1px 3px rgba(0,0,0,.5); max-width:74px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .shirt .gg{color:rgba(255,255,255,.85); font-size:10px; text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .legend-mini{display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); font-size:11px; position:relative; z-index:1; justify-content:center; padding-top:4px}
@@ -101,14 +105,14 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
 /* player detail */
 .detail{padding:18px; display:flex; flex-direction:column; gap:12px}
 .detail .empty{color:var(--muted); font-size:14px; text-align:center; margin:auto 0}
-.detail h3{font-size:20px; font-weight:800}
+.detail h3{font-size:21px; font-weight:600}
 .detail .meta{color:var(--muted); font-size:13px}
-.pill{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--blue-soft); color:var(--blue)}
-.pill.gold{background:color-mix(in srgb,var(--gold) 18%,transparent); color:var(--gold)}
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--accent-soft); color:var(--accent2)}
+.pill.gold{background:color-mix(in srgb,var(--accent) 18%,transparent); color:var(--accent)}
 .dstats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px}
 .dstat{background:var(--card2); border-radius:12px; padding:12px}
 .dstat .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-weight:700}
-.dstat .v{font-size:22px; font-weight:800; margin-top:3px}
+.dstat .v{font-family:var(--serif); font-size:23px; font-weight:500; margin-top:3px}
 
 /* charts */
 .chart-row{display:grid; grid-template-columns:1fr 1fr; gap:18px}
@@ -118,12 +122,12 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
 .hbar{display:grid; grid-template-columns:120px 1fr 42px; align-items:center; gap:10px; font-size:13px}
 .hbar .nm{color:var(--fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .hbar .track{background:var(--card2); border-radius:999px; height:14px; overflow:hidden}
-.hbar .track>i{display:block; height:100%; border-radius:999px; background:var(--gold)}
+.hbar .track>i{display:block; height:100%; border-radius:999px; background:var(--accent)}
 .hbar .val{text-align:right; color:var(--muted); font-weight:700}
 .posbars{display:flex; align-items:flex-end; gap:3px; height:180px; margin-top:8px}
 .posbars .pb{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:5px; height:100%}
 .posbars .pb .col{width:100%; border-radius:5px 5px 0 0; background:var(--muted); min-height:2px; transition:filter .12s}
-.posbars .pb.po .col{background:var(--gold)}
+.posbars .pb.po .col{background:var(--accent)}
 .posbars .pb.champ .col{background:var(--good)}
 .posbars .pb:hover .col{filter:brightness(1.12)}
 .posbars .pb .lab{font-size:9px; color:var(--muted)}
@@ -132,12 +136,12 @@ table.tbl{border-collapse:collapse; width:100%; font-size:13px}
 table.tbl th{ text-align:left; color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:6px 8px; border-bottom:1px solid var(--line)}
 table.tbl td{padding:7px 8px; border-bottom:1px solid var(--line)}
 table.tbl tr:last-child td{border-bottom:none}
-table.tbl .minibar{height:7px; border-radius:999px; background:var(--blue); display:inline-block; vertical-align:middle}
-.hl{background:color-mix(in srgb,var(--gold) 12%,transparent)}
+table.tbl .minibar{height:7px; border-radius:999px; background:var(--accent2); display:inline-block; vertical-align:middle}
+.hl{background:color-mix(in srgb,var(--accent) 12%,transparent)}
 .ens{display:flex; flex-direction:column; gap:10px}
 .ens .em{display:grid; grid-template-columns:170px 1fr 46px; gap:10px; align-items:center; font-size:13px}
 .ens .em .track{background:var(--card2); border-radius:999px; height:12px; overflow:hidden}
-.ens .em .track>i{display:block;height:100%;border-radius:999px;background:var(--blue)}
+.ens .em .track>i{display:block;height:100%;border-radius:999px;background:var(--accent2)}
 .agree{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
 .chip{font-size:12px; background:var(--card2); border:1px solid var(--line); border-radius:999px; padding:5px 11px; color:var(--muted)}
 .chip b{color:var(--good)}
@@ -146,7 +150,7 @@ table.tbl .minibar{height:7px; border-radius:999px; background:var(--blue); disp
 .sens .sp{background:var(--card2); border-radius:12px; padding:12px}
 .sens .sp .t{font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em}
 .spark{display:flex; align-items:flex-end; gap:4px; height:56px; margin-top:8px}
-.spark .sc{flex:1; background:var(--blue); border-radius:3px 3px 0 0; min-height:3px; opacity:.85}
+.spark .sc{flex:1; background:var(--accent2); border-radius:3px 3px 0 0; min-height:3px; opacity:.85}
 .spark-x{display:flex; gap:4px; margin-top:4px}
 .spark-x span{flex:1; text-align:center; font-size:9px; color:var(--muted); overflow:hidden}
 footer{margin-top:40px; color:var(--muted); font-size:12.5px; line-height:1.6}
@@ -208,7 +212,7 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
         <div class="posbars" id="posbars"></div>
         <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--muted)">
           <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--good)"></i> champion</span>
-          <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--gold)"></i> play-off (2–5)</span>
+          <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent)"></i> play-off (2–5)</span>
           <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--muted)"></i> no promotion</span>
         </div>
       </div>
@@ -249,7 +253,7 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
 </div>
 
 <script>
-const DATA = {"club": "CD Binéfar", "season": "26/27", "generated_at": "2026-07-14T14:15:24.628612+00:00", "promotion": 0.07799, "range": [0.06624, 0.08868], "p_direct": 0.04328, "p_playoff_reached": 0.53378, "p_playoff_won": 0.08902, "se": 0.0012012680100627004, "mean_position": 5.52062, "mean_points": 53.94766, "mean_goals_for": 52.56924, "strength_rank": 5, "group_size": 18, "position_distribution": [0.04328, 0.0891, 0.1423, 0.15708, 0.1453, 0.1195, 0.08662, 0.06324, 0.04544, 0.0335, 0.02472, 0.01726, 0.01284, 0.00828, 0.0057, 0.00312, 0.00206, 0.00066], "ensemble_members": {"Dixon-Coles (hl=365d)": 0.07776, "Dixon-Coles (hl=180d)": 0.06624, "Dixon-Coles (hl=730d)": 0.08868, "Independent Poisson": 0.07928}, "strength_agreement": {"Dixon-Coles vs Elo": 0.9, "Dixon-Coles vs pi": 0.879, "Elo vs pi": 0.974}, "newcomers": ["UD Fraga", "CD Brea", "Internacional Huesca", "Atlético Calatayud"], "players": [{"name": "Andreu Lladonosa", "position": "Goalkeeper", "age": 22, "nationality": "Spain", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Adrià Cornellà", "position": "Goalkeeper", "age": 22, "nationality": "Andorra", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Alex Sanz", "position": "Centre-Back", "age": 22, "nationality": "Spain", "line": "DEF", "exp_goals": 0.9, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.0}, {"name": "Joel Guillén", "position": "Centre-Back", "age": 24, "nationality": "Andorra", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Jan Rodríguez", "position": "Centre-Back", "age": 21, "nationality": "Spain", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Miguel Torguet", "position": "Right-Back", "age": 23, "nationality": "Spain", "line": "DEF", "exp_goals": 1.49, "p_top": 0.001, "goals_last": 2, "is_pen_taker": false, "new": false, "p_anytime": 0.045}, {"name": "Genís Cases", "position": "Right-Back", "age": 30, "nationality": "Spain", "line": "DEF", "exp_goals": 2.1, "p_top": 0.002, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.063}, {"name": "Víctor Nevot", "position": "Midfielder", "age": 21, "nationality": "Spain", "line": "MID", "exp_goals": 1.33, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.041}, {"name": "Álex Rico", "position": "Central Midfield", "age": 24, "nationality": "Spain", "line": "MID", "exp_goals": 3.07, "p_top": 0.006, "goals_last": 4, "is_pen_taker": false, "new": false, "p_anytime": 0.092}, {"name": "Ricky Ciruela", "position": "Central Midfield", "age": 25, "nationality": "Spain", "line": "MID", "exp_goals": 1.23, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.038}, {"name": "Vicente Torres", "position": "Central Midfield", "age": null, "nationality": "Spain", "line": "MID", "exp_goals": 0.61, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Carlos Bernadó", "position": "Central Midfield", "age": 28, "nationality": "Spain", "line": "MID", "exp_goals": 0.6, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Cesc Gómez", "position": "Left Winger", "age": 28, "nationality": "Spain", "line": "FWD", "exp_goals": 4.41, "p_top": 0.019, "goals_last": 5, "is_pen_taker": false, "new": false, "p_anytime": 0.129}, {"name": "Gerard Querol", "position": "Right Winger", "age": 21, "nationality": "Spain", "line": "FWD", "exp_goals": 4.99, "p_top": 0.031, "goals_last": 6, "is_pen_taker": false, "new": false, "p_anytime": 0.145}, {"name": "Chicho Barreda", "position": "Second Striker", "age": 32, "nationality": "Spain", "line": "FWD", "exp_goals": 10.29, "p_top": 0.354, "goals_last": 14, "is_pen_taker": false, "new": false, "p_anytime": 0.275}, {"name": "Adrià de Mesa", "position": "Centre-Forward", "age": 35, "nationality": "Spain", "line": "FWD", "exp_goals": 11.92, "p_top": 0.574, "goals_last": 14, "is_pen_taker": true, "new": false, "p_anytime": 0.241}, {"name": "Izan Fernández", "position": "Centre-Forward", "age": 24, "nationality": "Andorra", "line": "FWD", "exp_goals": 2.01, "p_top": 0.001, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.061}, {"name": "Raúl Samitier", "position": "Centre-Forward", "age": 22, "nationality": "Spain", "line": "FWD", "exp_goals": 3.88, "p_top": 0.012, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.114}], "goalscorers": [{"player": "Adrià de Mesa", "position": "Centre-Forward", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": true, "exp_goals": 11.92, "p10": 7, "p90": 17, "p_team_top_scorer": 0.574}, {"player": "Chicho Barreda", "position": "Second Striker", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 10.29, "p10": 6, "p90": 15, "p_team_top_scorer": 0.354}, {"player": "Gerard Querol", "position": "Right Winger", "goals_last_season": 6, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.99, "p10": 2, "p90": 9, "p_team_top_scorer": 0.031}, {"player": "Cesc Gómez", "position": "Left Winger", "goals_last_season": 5, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.41, "p10": 1, "p90": 8, "p_team_top_scorer": 0.019}, {"player": "Raúl Samitier", "position": "Centre-Forward", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.88, "p10": 1, "p90": 7, "p_team_top_scorer": 0.012}, {"player": "Álex Rico", "position": "Central Midfield", "goals_last_season": 4, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.07, "p10": 1, "p90": 6, "p_team_top_scorer": 0.006}, {"player": "Genís Cases", "position": "Right-Back", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 2.1, "p10": 0, "p90": 5, "p_team_top_scorer": 0.002}, {"player": "Izan Fernández", "position": "Centre-Forward", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 2.01, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Miguel Torguet", "position": "Right-Back", "goals_last_season": 2, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.49, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Víctor Nevot", "position": "Midfielder", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.33, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Ricky Ciruela", "position": "Central Midfield", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.23, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Alex Sanz", "position": "Centre-Back", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 0.9, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Vicente Torres", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.61, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Carlos Bernadó", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.6, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Jan Rodríguez", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Joel Guillén", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Adrià Cornellà", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}, {"player": "Andreu Lladonosa", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}], "pichichi": [{"player_team": "Youssef (CA Monzón)", "exp_goals": 20.93, "p_pichichi": 0.809}, {"player_team": "Chicho (CD Binéfar)", "exp_goals": 10.24, "p_pichichi": 0.033}, {"player_team": "Alberto (Andorra CF)", "exp_goals": 10.49, "p_pichichi": 0.031}, {"player_team": "De Mesa (CD Binéfar)", "exp_goals": 10.26, "p_pichichi": 0.03}, {"player_team": "Bernárdez (CA Monzón)", "exp_goals": 9.81, "p_pichichi": 0.028}, {"player_team": "Tapia (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.013}, {"player_team": "Jorge (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.012}, {"player_team": "Rotellar (CD Caspe)", "exp_goals": 7.66, "p_pichichi": 0.005}, {"player_team": "Seral (SD Huesca B)", "exp_goals": 6.51, "p_pichichi": 0.004}, {"player_team": "Hugo (CF Epila)", "exp_goals": 6.44, "p_pichichi": 0.003}, {"player_team": "Hamza (CD La Almunia)", "exp_goals": 6.79, "p_pichichi": 0.003}, {"player_team": "Balué (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Flo (CDJ Tamarite)", "exp_goals": 5.8, "p_pichichi": 0.002}, {"player_team": "Alexis (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Peralta (CD Cuarte)", "exp_goals": 5.83, "p_pichichi": 0.002}, {"player_team": "Calvo (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Solá (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Álvarez (CF Epila)", "exp_goals": 5.84, "p_pichichi": 0.002}, {"player_team": "Querol (CD Binéfar)", "exp_goals": 5.08, "p_pichichi": 0.001}, {"player_team": "Raúl (Robres CD)", "exp_goals": 5.89, "p_pichichi": 0.001}], "sensitivity": [{"parameter": "half_life_days", "value": 180.0, "p_promotion": 0.0668}, {"parameter": "half_life_days", "value": 365.0, "p_promotion": 0.0774}, {"parameter": "half_life_days", "value": 540.0, "p_promotion": 0.0883}, {"parameter": "half_life_days", "value": 730.0, "p_promotion": 0.0989}, {"parameter": "l2", "value": 0.0, "p_promotion": 0.0814}, {"parameter": "l2", "value": 0.05, "p_promotion": 0.0774}, {"parameter": "l2", "value": 0.15, "p_promotion": 0.0813}, {"parameter": "l2", "value": 0.3, "p_promotion": 0.0851}, {"parameter": "newcomer_penalty", "value": 0.0, "p_promotion": 0.0761}, {"parameter": "newcomer_penalty", "value": 0.25, "p_promotion": 0.0774}, {"parameter": "newcomer_penalty", "value": 0.5, "p_promotion": 0.0811}, {"parameter": "newcomer_penalty", "value": 0.75, "p_promotion": 0.0828}, {"parameter": "national_conversion", "value": 0.2, "p_promotion": 0.0599}, {"parameter": "national_conversion", "value": 0.3, "p_promotion": 0.069}, {"parameter": "national_conversion", "value": 0.4, "p_promotion": 0.0774}, {"parameter": "national_conversion", "value": 0.55, "p_promotion": 0.0909}, {"parameter": "national_conversion", "value": 0.7, "p_promotion": 0.1042}], "backtest": {"n_matches": 2415, "log_loss": 1.0341, "brier": 0.6209, "rps": 0.209, "baseline_log_loss": 1.0828, "baseline_brier": 0.6558, "accuracy": 0.4754, "calibration": {"0.068": 0.151, "0.156": 0.195, "0.258": 0.278, "0.351": 0.338, "0.449": 0.431, "0.547": 0.501, "0.643": 0.652, "0.746": 0.676, "0.854": 0.8}}, "model_params": {"half_life_days": 365.0, "l2": 0.05, "home_advantage": 0.2043, "mu": 0.0019, "rho": -0.0576, "national_phase_conversion": 0.4, "newcomer_net_strength_penalty": 0.25, "elo_binefar": 1556.3, "pi_binefar": 0.888}, "notes": []};
+const DATA = {"club": "CD Binéfar", "season": "26/27", "generated_at": "2026-07-14T14:30:25.807030+00:00", "promotion": 0.07799, "range": [0.06624, 0.08868], "p_direct": 0.04328, "p_playoff_reached": 0.53378, "p_playoff_won": 0.08902, "se": 0.0012012680100627004, "mean_position": 5.52062, "mean_points": 53.94766, "mean_goals_for": 52.56924, "strength_rank": 5, "group_size": 18, "position_distribution": [0.04328, 0.0891, 0.1423, 0.15708, 0.1453, 0.1195, 0.08662, 0.06324, 0.04544, 0.0335, 0.02472, 0.01726, 0.01284, 0.00828, 0.0057, 0.00312, 0.00206, 0.00066], "ensemble_members": {"Dixon-Coles (hl=365d)": 0.07776, "Dixon-Coles (hl=180d)": 0.06624, "Dixon-Coles (hl=730d)": 0.08868, "Independent Poisson": 0.07928}, "strength_agreement": {"Dixon-Coles vs Elo": 0.9, "Dixon-Coles vs pi": 0.879, "Elo vs pi": 0.974}, "newcomers": ["UD Fraga", "CD Brea", "Internacional Huesca", "Atlético Calatayud"], "players": [{"name": "Andreu Lladonosa", "position": "Goalkeeper", "age": 22, "nationality": "Spain", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Adrià Cornellà", "position": "Goalkeeper", "age": 22, "nationality": "Andorra", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Alex Sanz", "position": "Centre-Back", "age": 22, "nationality": "Spain", "line": "DEF", "exp_goals": 0.9, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.0}, {"name": "Joel Guillén", "position": "Centre-Back", "age": 24, "nationality": "Andorra", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Jan Rodríguez", "position": "Centre-Back", "age": 21, "nationality": "Spain", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Miguel Torguet", "position": "Right-Back", "age": 23, "nationality": "Spain", "line": "DEF", "exp_goals": 1.49, "p_top": 0.001, "goals_last": 2, "is_pen_taker": false, "new": false, "p_anytime": 0.045}, {"name": "Genís Cases", "position": "Right-Back", "age": 30, "nationality": "Spain", "line": "DEF", "exp_goals": 2.1, "p_top": 0.002, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.063}, {"name": "Víctor Nevot", "position": "Midfielder", "age": 21, "nationality": "Spain", "line": "MID", "exp_goals": 1.33, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.041}, {"name": "Álex Rico", "position": "Central Midfield", "age": 24, "nationality": "Spain", "line": "MID", "exp_goals": 3.07, "p_top": 0.006, "goals_last": 4, "is_pen_taker": false, "new": false, "p_anytime": 0.092}, {"name": "Ricky Ciruela", "position": "Central Midfield", "age": 25, "nationality": "Spain", "line": "MID", "exp_goals": 1.23, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.038}, {"name": "Vicente Torres", "position": "Central Midfield", "age": null, "nationality": "Spain", "line": "MID", "exp_goals": 0.61, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Carlos Bernadó", "position": "Central Midfield", "age": 28, "nationality": "Spain", "line": "MID", "exp_goals": 0.6, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Cesc Gómez", "position": "Left Winger", "age": 28, "nationality": "Spain", "line": "FWD", "exp_goals": 4.41, "p_top": 0.019, "goals_last": 5, "is_pen_taker": false, "new": false, "p_anytime": 0.129}, {"name": "Gerard Querol", "position": "Right Winger", "age": 21, "nationality": "Spain", "line": "FWD", "exp_goals": 4.99, "p_top": 0.031, "goals_last": 6, "is_pen_taker": false, "new": false, "p_anytime": 0.145}, {"name": "Chicho Barreda", "position": "Second Striker", "age": 32, "nationality": "Spain", "line": "FWD", "exp_goals": 10.29, "p_top": 0.354, "goals_last": 14, "is_pen_taker": false, "new": false, "p_anytime": 0.275}, {"name": "Adrià de Mesa", "position": "Centre-Forward", "age": 35, "nationality": "Spain", "line": "FWD", "exp_goals": 11.92, "p_top": 0.574, "goals_last": 14, "is_pen_taker": true, "new": false, "p_anytime": 0.241}, {"name": "Izan Fernández", "position": "Centre-Forward", "age": 24, "nationality": "Andorra", "line": "FWD", "exp_goals": 2.01, "p_top": 0.001, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.061}, {"name": "Raúl Samitier", "position": "Centre-Forward", "age": 22, "nationality": "Spain", "line": "FWD", "exp_goals": 3.88, "p_top": 0.012, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.114}], "goalscorers": [{"player": "Adrià de Mesa", "position": "Centre-Forward", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": true, "exp_goals": 11.92, "p10": 7, "p90": 17, "p_team_top_scorer": 0.574}, {"player": "Chicho Barreda", "position": "Second Striker", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 10.29, "p10": 6, "p90": 15, "p_team_top_scorer": 0.354}, {"player": "Gerard Querol", "position": "Right Winger", "goals_last_season": 6, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.99, "p10": 2, "p90": 9, "p_team_top_scorer": 0.031}, {"player": "Cesc Gómez", "position": "Left Winger", "goals_last_season": 5, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.41, "p10": 1, "p90": 8, "p_team_top_scorer": 0.019}, {"player": "Raúl Samitier", "position": "Centre-Forward", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.88, "p10": 1, "p90": 7, "p_team_top_scorer": 0.012}, {"player": "Álex Rico", "position": "Central Midfield", "goals_last_season": 4, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.07, "p10": 1, "p90": 6, "p_team_top_scorer": 0.006}, {"player": "Genís Cases", "position": "Right-Back", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 2.1, "p10": 0, "p90": 5, "p_team_top_scorer": 0.002}, {"player": "Izan Fernández", "position": "Centre-Forward", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 2.01, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Miguel Torguet", "position": "Right-Back", "goals_last_season": 2, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.49, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Víctor Nevot", "position": "Midfielder", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.33, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Ricky Ciruela", "position": "Central Midfield", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.23, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Alex Sanz", "position": "Centre-Back", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 0.9, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Vicente Torres", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.61, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Carlos Bernadó", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.6, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Jan Rodríguez", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Joel Guillén", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Adrià Cornellà", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}, {"player": "Andreu Lladonosa", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}], "pichichi": [{"player_team": "Youssef (CA Monzón)", "exp_goals": 20.93, "p_pichichi": 0.809}, {"player_team": "De Mesa (CD Binéfar)", "exp_goals": 10.24, "p_pichichi": 0.033}, {"player_team": "Alberto (Andorra CF)", "exp_goals": 10.49, "p_pichichi": 0.031}, {"player_team": "Chicho (CD Binéfar)", "exp_goals": 10.26, "p_pichichi": 0.03}, {"player_team": "Bernárdez (CA Monzón)", "exp_goals": 9.81, "p_pichichi": 0.028}, {"player_team": "Tapia (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.013}, {"player_team": "Jorge (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.012}, {"player_team": "Rotellar (CD Caspe)", "exp_goals": 7.66, "p_pichichi": 0.005}, {"player_team": "Seral (SD Huesca B)", "exp_goals": 6.51, "p_pichichi": 0.004}, {"player_team": "Hugo (CF Epila)", "exp_goals": 6.44, "p_pichichi": 0.003}, {"player_team": "Hamza (CD La Almunia)", "exp_goals": 6.79, "p_pichichi": 0.003}, {"player_team": "Balué (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Flo (CDJ Tamarite)", "exp_goals": 5.8, "p_pichichi": 0.002}, {"player_team": "Alexis (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Peralta (CD Cuarte)", "exp_goals": 5.83, "p_pichichi": 0.002}, {"player_team": "Calvo (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Solá (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Álvarez (CF Epila)", "exp_goals": 5.84, "p_pichichi": 0.002}, {"player_team": "Querol (CD Binéfar)", "exp_goals": 5.08, "p_pichichi": 0.001}, {"player_team": "Raúl (Robres CD)", "exp_goals": 5.89, "p_pichichi": 0.001}], "sensitivity": [{"parameter": "half_life_days", "value": 180.0, "p_promotion": 0.0668}, {"parameter": "half_life_days", "value": 365.0, "p_promotion": 0.0774}, {"parameter": "half_life_days", "value": 540.0, "p_promotion": 0.0883}, {"parameter": "half_life_days", "value": 730.0, "p_promotion": 0.0989}, {"parameter": "l2", "value": 0.0, "p_promotion": 0.0814}, {"parameter": "l2", "value": 0.05, "p_promotion": 0.0774}, {"parameter": "l2", "value": 0.15, "p_promotion": 0.0813}, {"parameter": "l2", "value": 0.3, "p_promotion": 0.0851}, {"parameter": "newcomer_penalty", "value": 0.0, "p_promotion": 0.0761}, {"parameter": "newcomer_penalty", "value": 0.25, "p_promotion": 0.0774}, {"parameter": "newcomer_penalty", "value": 0.5, "p_promotion": 0.0811}, {"parameter": "newcomer_penalty", "value": 0.75, "p_promotion": 0.0828}, {"parameter": "national_conversion", "value": 0.2, "p_promotion": 0.0599}, {"parameter": "national_conversion", "value": 0.3, "p_promotion": 0.069}, {"parameter": "national_conversion", "value": 0.4, "p_promotion": 0.0774}, {"parameter": "national_conversion", "value": 0.55, "p_promotion": 0.0909}, {"parameter": "national_conversion", "value": 0.7, "p_promotion": 0.1042}], "backtest": {"n_matches": 2415, "log_loss": 1.0341, "brier": 0.6209, "rps": 0.209, "baseline_log_loss": 1.0828, "baseline_brier": 0.6558, "accuracy": 0.4754, "calibration": {"0.068": 0.151, "0.156": 0.195, "0.258": 0.278, "0.351": 0.338, "0.449": 0.431, "0.547": 0.501, "0.643": 0.652, "0.746": 0.676, "0.854": 0.8}, "champion": {"seasons": 8, "mean_p_direct_to_champion": 0.39, "mean_predicted_pos_of_champion": 3.54, "base_rate": 0.056}}, "model_params": {"half_life_days": 365.0, "l2": 0.05, "home_advantage": 0.2043, "mu": 0.0019, "rho": -0.0576, "national_phase_conversion": 0.4, "newcomer_net_strength_penalty": 0.25, "elo_binefar": 1556.3, "pi_binefar": 0.888}, "notes": []};
 const $ = (s,r=document)=>r.querySelector(s);
 const pct = x => (x*100).toFixed(1).replace(/\.0$/,'')+'%';
 const pct0 = x => Math.round(x*100)+'%';
@@ -299,8 +303,8 @@ if(DATA.backtest){const b=DATA.backtest;$('#btline').textContent=`Walk-forward l
     svg.appendChild(el);
   };
   arc(0,1,'var(--card2)',10);                 // track
-  arc(rlo,rhi,'var(--gold)',10,true);         // ensemble range (faint)
-  arc(0,frac,'var(--gold)',10);               // mean value
+  arc(rlo,rhi,'var(--accent)',10,true);         // ensemble range (faint)
+  arc(0,frac,'var(--accent)',10);               // mean value
 })();
 
 /* tiles */
@@ -317,8 +321,8 @@ $('#tiles').innerHTML=tiles.map(t=>`<div class="card tile"><div class="k">${t.k}
 /* route strip */
 const routes=[
   {lab:'Direct (champion)',v:DATA.p_direct,c:'var(--good)'},
-  {lab:'Reach play-off',v:DATA.p_playoff_reached,c:'var(--gold)'},
-  {lab:'Win territorial play-off',v:DATA.p_playoff_won,c:'var(--blue)'},
+  {lab:'Reach play-off',v:DATA.p_playoff_reached,c:'var(--accent)'},
+  {lab:'Win territorial play-off',v:DATA.p_playoff_won,c:'var(--accent2)'},
 ];
 $('#routeStrip').innerHTML=routes.map(r=>`<div class="rt"><div class="lab"><span>${r.lab}</span><b>${pct(r.v)}</b></div><div class="bar"><i style="width:${Math.min(100,r.v*100/0.6)}%;background:${r.c}"></i></div></div>`).join('');
 

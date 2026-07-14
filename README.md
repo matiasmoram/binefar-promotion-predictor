@@ -29,12 +29,14 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
 
 ## 🖥️ Interactive dashboard
 
-A self-contained, theme-aware web console — **inspect the squad on a pitch**
-(disc size = predicted goals, gold ring = penalty taker; click any player for
-their full 26/27 projection), read the promotion gauge, goalscorers, pichichi
-race, ensemble and sensitivity. Open [`web/index.html`](web/index.html) in any
-browser (or serve `web/` via GitHub Pages) — it is generated from
-`prediction.json` and needs no build step or network.
+A self-contained web console styled in **Claude / Anthropic's design language**
+(warm ivory & dark grounds, Claude coral accent, serif display + monospace
+labels; light and dark themes). **Inspect the squad on a pitch** — disc size =
+predicted goals, coral ring = penalty taker; click any player for their full
+26/27 projection — and read the promotion gauge, goalscorers, pichichi race,
+ensemble and sensitivity. Open [`web/index.html`](web/index.html) in any browser
+(or serve `web/` via GitHub Pages); it is generated from `prediction.json` and
+needs no build step or network.
 
 ```bash
 binefar-predict dashboard     # rebuild web/index.html from the latest prediction
@@ -100,8 +102,12 @@ Walk-forward, scoring ~2,415 matches the model never saw at fit time:
 
 Well-calibrated (predicted 0.64 home-win → observed ~0.64), and the promotion
 probability stays inside a tight **6.6–10.5%** band across *all* reasonable
-assumptions (see sensitivity plot). Lower-league football is inherently
-low-signal, so an ~8% calibrated probability with honest error bars is the goal.
+assumptions (see sensitivity plot). A **champion backtest** adds a headline
+reality check: across 8 past seasons the model gave the *eventual champion* a
+**39% average pre-season title probability** (vs a 6% base rate) and predicted
+them ~3.5th on average — real skill, with a couple of genuine upsets that reflect
+how low-signal this tier is. An ~8% calibrated probability with honest error bars
+is the goal, not false precision.
 
 <p align="center">
   <img src="models/group_strength.png" width="48%">

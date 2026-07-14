@@ -147,13 +147,16 @@ def save_snapshot(
     matches: pd.DataFrame,
     latest_standings: pd.DataFrame,
     path: Path = SNAPSHOT_PATH,
+    standings_by_season: dict[str, pd.DataFrame] | None = None,
 ) -> None:
     payload = {
         "generated_at": datetime.now(tz=timezone.utc).isoformat(),
         "matches": json.loads(matches.to_json(orient="records", date_format="iso")),
-        "latest_standings": json.loads(
-            latest_standings.to_json(orient="records")
-        ),
+        "latest_standings": json.loads(latest_standings.to_json(orient="records")),
+        "standings_by_season": {
+            k: json.loads(v.to_json(orient="records"))
+            for k, v in (standings_by_season or {}).items()
+        },
     }
     with path.open("w", encoding="utf-8") as fh:
         json.dump(payload, fh, ensure_ascii=False, indent=2)
@@ -169,6 +172,15 @@ def load_snapshot(
         matches["date"] = pd.to_datetime(matches["date"])
     standings = pd.DataFrame(payload["latest_standings"])
     return matches, standings
+
+
+def load_standings_by_season(path: Path = SNAPSHOT_PATH) -> dict[str, pd.DataFrame]:
+    """Official per-season final tables (from the snapshot), for validation."""
+    if not path.exists():
+        return {}
+    with path.open(encoding="utf-8") as fh:
+        payload = json.load(fh)
+    return {k: pd.DataFrame(v) for k, v in payload.get("standings_by_season", {}).items()}
 
 
 def fetch_promoted_teams(

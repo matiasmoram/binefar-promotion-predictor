@@ -37,10 +37,10 @@ def _cmd_predict(args) -> None:
 def _cmd_scrape(args) -> None:
     from . import data, players as P
 
-    matches, latest, _ = data.collect(force_refresh=args.refresh)
-    data.save_snapshot(matches, latest)
-    print(f"Cached {len(matches):,} matches; snapshot written to "
-          f"{data.SNAPSHOT_PATH}")
+    matches, latest, by_season = data.collect(force_refresh=args.refresh)
+    data.save_snapshot(matches, latest, standings_by_season=by_season)
+    print(f"Cached {len(matches):,} matches + {len(by_season)} season tables; "
+          f"snapshot written to {data.SNAPSHOT_PATH}")
     if args.goals:
         print("Scraping league goal incidents (this is slow) …")
         goals = P.load_league_goals(force_refresh=args.refresh, prefer_cache=False)

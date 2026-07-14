@@ -198,6 +198,26 @@ def run_prediction(
             "accuracy": round(rep.accuracy, 4), "calibration": rep.calibration,
         }
         _say("      " + rep.summary().replace("\n", "\n      "))
+        # champion backtest: did the model's pre-season favourite match reality?
+        try:
+            from .evaluate import champion_backtest
+            sbs = data.load_standings_by_season()
+            if sbs:
+                cb = champion_backtest(matches, sbs, half_life_days=half_life_days,
+                                       l2=l2, n_sims=4000)
+                if not cb.empty:
+                    backtest_dict["champion"] = {
+                        "seasons": int(len(cb)),
+                        "mean_p_direct_to_champion": round(float(cb["model_p_direct"].mean()), 3),
+                        "mean_predicted_pos_of_champion": round(float(cb["model_mean_pos"].mean()), 2),
+                        "base_rate": round(1.0 / config.LEAGUE_SIZE, 3),
+                    }
+                    _say(f"      champion backtest: model gave eventual champions "
+                         f"{backtest_dict['champion']['mean_p_direct_to_champion']:.0%} avg "
+                         f"pre-season title prob (base rate ~6%), "
+                         f"predicted pos ~{backtest_dict['champion']['mean_predicted_pos_of_champion']}")
+        except Exception as exc:
+            notes.append(f"Champion backtest skipped: {exc}")
 
     mean_goals_for = float(result.target_goals_for.mean()) if result.target_goals_for is not None else 0.0
 
@@ -345,6 +365,12 @@ def _write_markdown(report, model, result, path: Path) -> None:
               f"- Log-loss **{b['log_loss']}** (baseline {b['baseline_log_loss']})",
               f"- Brier **{b['brier']}** (baseline {b['baseline_brier']})",
               f"- RPS **{b['rps']}**; top-pick accuracy **{b['accuracy']:.1%}**"]
+        if b.get("champion"):
+            c = b["champion"]
+            L.append(f"- Champion backtest ({c['seasons']} seasons): the model gave the "
+                     f"eventual champion **{c['mean_p_direct_to_champion']:.0%}** average "
+                     f"pre-season title probability (base rate {c['base_rate']:.0%}) and "
+                     f"predicted them ~**{c['mean_predicted_pos_of_champion']:.1f}th** on average.")
 
     if report.squad:
         L += ["", f"## Squad ({len(report.squad)} players)", "",

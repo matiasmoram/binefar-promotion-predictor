@@ -1,7 +1,7 @@
 {
   "club": "CD Binéfar",
   "target_season": "26/27",
-  "generated_at": "2026-07-14T14:15:24.628612+00:00",
+  "generated_at": "2026-07-14T14:30:25.807030+00:00",
   "n_matches_trained": 2860,
   "n_seasons": 9,
   "promotion_probability": 0.07799,
@@ -481,7 +481,7 @@
       "p_pichichi": 0.809
     },
     {
-      "player_team": "Chicho (CD Binéfar)",
+      "player_team": "De Mesa (CD Binéfar)",
       "exp_goals": 10.24,
       "p_pichichi": 0.033
     },
@@ -491,7 +491,7 @@
       "p_pichichi": 0.031
     },
     {
-      "player_team": "De Mesa (CD Binéfar)",
+      "player_team": "Chicho (CD Binéfar)",
       "exp_goals": 10.26,
       "p_pichichi": 0.03
     },
@@ -579,30 +579,30 @@
   "goleadores_crosscheck": [
     {
       "rank": 4,
-      "player": "De Mesa",
-      "team": "CD Binéfar",
-      "goals": 14
-    },
-    {
-      "rank": 6,
       "player": "Chicho",
       "team": "CD Binéfar",
       "goals": 14
     },
     {
-      "rank": 35,
+      "rank": 5,
+      "player": "De Mesa",
+      "team": "CD Binéfar",
+      "goals": 14
+    },
+    {
+      "rank": 32,
       "player": "Querol",
       "team": "CD Binéfar",
       "goals": 6
     },
     {
-      "rank": 44,
+      "rank": 42,
       "player": "Cesc",
       "team": "CD Binéfar",
       "goals": 5
     },
     {
-      "rank": 68,
+      "rank": 65,
       "player": "Rico",
       "team": "CD Binéfar",
       "goals": 4
@@ -614,13 +614,13 @@
       "goals": 3
     },
     {
-      "rank": 94,
+      "rank": 83,
       "player": "Samitier",
       "team": "CD Binéfar",
       "goals": 3
     },
     {
-      "rank": 126,
+      "rank": 116,
       "player": "Torguet",
       "team": "CD Binéfar",
       "goals": 2
@@ -809,6 +809,12 @@
       "0.643": 0.652,
       "0.746": 0.676,
       "0.854": 0.8
+    },
+    "champion": {
+      "seasons": 8,
+      "mean_p_direct_to_champion": 0.39,
+      "mean_predicted_pos_of_champion": 3.54,
+      "base_rate": 0.056
     }
   },
   "notes": []

@@ -1,6 +1,6 @@
 # CD Binéfar — promotion forecast, 26/27
 
-**Generated:** 2026-07-14T14:15:24.628612+00:00
+**Generated:** 2026-07-14T14:30:25.807030+00:00
 
 ## Headline
 
@@ -77,9 +77,9 @@ Teams promoted up from Regional Preferente Aragón (real names where resolvable;
 | Player (team) | Exp goals | P(pichichi) |
 |---|---|---|
 | Youssef (CA Monzón) | 20.93 | 81% |
-| Chicho (CD Binéfar) | 10.24 | 3% |
+| De Mesa (CD Binéfar) | 10.24 | 3% |
 | Alberto (Andorra CF) | 10.49 | 3% |
-| De Mesa (CD Binéfar) | 10.26 | 3% |
+| Chicho (CD Binéfar) | 10.26 | 3% |
 | Bernárdez (CA Monzón) | 9.81 | 3% |
 | Tapia (CD Cuarte) | 8.67 | 1% |
 | Jorge (CD Cuarte) | 8.67 | 1% |
@@ -136,6 +136,7 @@ Teams promoted up from Regional Preferente Aragón (real names where resolvable;
 - Log-loss **1.0341** (baseline 1.0828)
 - Brier **0.6209** (baseline 0.6558)
 - RPS **0.209**; top-pick accuracy **47.5%**
+- Champion backtest (8 seasons): the model gave the eventual champion **39%** average pre-season title probability (base rate 6%) and predicted them ~**3.5th** on average.
 
 ## Squad (18 players)
 
