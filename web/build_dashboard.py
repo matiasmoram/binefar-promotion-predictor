@@ -75,12 +75,14 @@ def build() -> None:
         "ensemble_members": pred["ensemble_members"],
         "strength_agreement": pred.get("strength_agreement", {}),
         "newcomers": pred.get("newcomers", []),
+        "projected_table": pred.get("projected_table", []),
         "players": _merge_players(pred),
         "goalscorers": [g for g in pred.get("goalscorers", [])
                         if not g["player"].startswith("(other")],
         "pichichi": pred.get("pichichi_race", []),
         "sensitivity": pred.get("sensitivity", []),
         "backtest": pred.get("backtest"),
+        "bootstrap": pred.get("bootstrap"),
         "model_params": pred.get("model_params", {}),
         "notes": pred.get("notes", []),
     }
@@ -245,6 +247,13 @@ table.tbl td{padding:7px 8px; border-bottom:1px solid var(--line)}
 table.tbl tr:last-child td{border-bottom:none}
 table.tbl .minibar{height:7px; border-radius:999px; background:var(--accent2); display:inline-block; vertical-align:middle}
 .hl{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+/* position heatmap strip */
+.heat{display:flex; gap:1px; min-width:230px}
+.heat .cell{flex:1; height:18px; border-radius:2px; position:relative}
+.heat .cut{width:0; border-left:2px dashed var(--muted); margin:0 1px; opacity:.6}
+.heat-x{display:flex; gap:1px; min-width:230px; margin-top:3px}
+.heat-x span{flex:1; text-align:center; font-size:8px; color:var(--muted); font-family:var(--mono)}
+table.tbl td.strip{padding:6px 8px}
 .ens{display:flex; flex-direction:column; gap:10px}
 .ens .em{display:grid; grid-template-columns:170px 1fr 46px; gap:10px; align-items:center; font-size:13px}
 .ens .em .track{background:var(--card2); border-radius:999px; height:12px; overflow:hidden}
@@ -342,6 +351,13 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
 
   <section class="section">
     <div class="card chart-card">
+      <div class="section-h"><h2>Projected final table</h2><span class="note">finishing-position probability heatmap · 50k simulated seasons · click headers to sort</span></div>
+      <div style="overflow-x:auto"><table class="tbl" id="projtable"></table></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card chart-card">
       <div class="section-h"><h2>Sensitivity</h2><span class="note">how the promotion probability moves with each modelling assumption</span></div>
       <div class="sens" id="sensitivity"></div>
     </div>
@@ -388,6 +404,8 @@ $('#subtitle').textContent=`Promotion & goalscorer forecast · Tercera Federaci�
 $('#promoNum').textContent=pct(DATA.promotion);
 $('#promoRange').textContent=`${pct(DATA.range[0])} – ${pct(DATA.range[1])}`;
 $('#promoSE').textContent='±'+pct(DATA.se);
+if(DATA.bootstrap){const gs=document.querySelector('.gauge-sub');
+  gs.innerHTML+=`<br><span title="Bootstrap over ${DATA.bootstrap.n_boot} refits — reflects that tier-5 ratings are estimated from small samples">Parameter-uncertainty 90% CI <b>${pct(DATA.bootstrap.ci90[0])} – ${pct(DATA.bootstrap.ci90[1])}</b></span>`;}
 $('#newcomers').textContent=(DATA.newcomers||[]).join(', ')||'—';
 $('#genat').textContent='Generated '+new Date(DATA.generated_at).toISOString().slice(0,10)+'.';
 if(DATA.backtest){const b=DATA.backtest;$('#btline').textContent=`Walk-forward log-loss ${b.log_loss} vs ${b.baseline_log_loss} baseline (${b.n_matches.toLocaleString()} matches).`;}
@@ -520,6 +538,49 @@ function showPlayer(name){
   $('#ensemble').innerHTML=Object.entries(m).map(([k,v])=>`
     <div class="em"><span>${k}</span><span class="track"><i style="width:${v/mx*100}%"></i></span><span style="text-align:right;color:var(--muted);font-weight:700">${pct(v)}</span></div>`).join('');
   $('#agreement').innerHTML=Object.entries(DATA.strength_agreement||{}).map(([k,v])=>`<span class="chip">${k} <b>${(+v).toFixed(2)}</b></span>`).join('');
+})();
+
+/* projected final table with a finishing-position heatmap strip (538-style) */
+(function(){
+  const rows=DATA.projected_table||[]; if(!rows.length){return;}
+  const n=(rows[0].pos_dist||[]).length;
+  // shared colour scale so cells are comparable across the whole table
+  const maxCell=Math.max(0.001,...rows.flatMap(r=>r.pos_dist||[]));
+  const cell=(p)=>{
+    const t=Math.min(1,p/maxCell);
+    // sequential single-hue coral ramp on a faint ground (accessible: value also in tooltip)
+    return `background:color-mix(in srgb, var(--accent) ${Math.round(t*100)}%, var(--card2))`;
+  };
+  let sortKey='mean_points',desc=true;
+  const cols=[
+    {k:'mean_points',lab:'Pts'},{k:'p_champion',lab:'Champ'},{k:'p_top5',lab:'Top-5'},
+  ];
+  function strip(r){
+    const cells=(r.pos_dist||[]).map((p,i)=>{
+      const cut=(i===5)?'<span class="cut"></span>':'';
+      return `${cut}<span class="cell" style="${cell(p)}" data-tip="${r.team} — finish ${i+1}: ${pct(p)}"></span>`;
+    }).join('');
+    return `<div class="heat">${cells}</div>`;
+  }
+  function render(){
+    const sorted=[...rows].sort((a,b)=>{const d=a[sortKey]<b[sortKey]?-1:(a[sortKey]>b[sortKey]?1:0);return desc?-d:d;});
+    const th=cols.map(c=>`<th data-k="${c.k}" style="cursor:pointer;text-align:right">${c.lab}${sortKey===c.k?(desc?' ▾':' ▴'):''}</th>`).join('');
+    const head=`<tr><th>#</th><th data-k="team" style="cursor:pointer">Team</th><th>Finishing position 1 → ${n} (colour = probability)</th>${th}</tr>`;
+    const body=sorted.map((r,i)=>{
+      const hl=r.is_target?' class="hl"':'';
+      return `<tr${hl}><td style="color:var(--muted)">${i+1}</td><td>${r.team}</td>`+
+        `<td class="strip">${strip(r)}</td>`+
+        `<td style="text-align:right">${r.mean_points.toFixed(1)}</td>`+
+        `<td style="text-align:right">${pct0(r.p_champion)}</td>`+
+        `<td style="text-align:right">${pct0(r.p_top5)}</td></tr>`;
+    }).join('');
+    const el=$('#projtable'); el.innerHTML=head+body;
+    el.querySelectorAll('th[data-k]').forEach(h=>h.addEventListener('click',()=>{
+      const k=h.dataset.k; if(k===sortKey)desc=!desc; else {sortKey=k;desc=(k!=='team'&&k!=='mean_position');} render();}));
+    el.querySelectorAll('.cell').forEach(c=>{
+      c.addEventListener('mousemove',e=>showTip(e,c.dataset.tip)); c.addEventListener('mouseleave',hideTip);});
+  }
+  render();
 })();
 
 /* sensitivity small multiples */

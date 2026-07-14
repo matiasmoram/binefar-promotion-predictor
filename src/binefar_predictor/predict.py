@@ -43,6 +43,7 @@ class PredictionReport:
     strength_agreement: dict
     group: list[str]
     newcomers: list[str]
+    projected_table: list
     model_params: dict
     squad: list[dict] = field(default_factory=list)
     goalscorers: list[dict] = field(default_factory=list)
@@ -52,6 +53,7 @@ class PredictionReport:
     sensitivity: list[dict] = field(default_factory=list)
     form: dict = field(default_factory=dict)
     backtest: dict | None = None
+    bootstrap: dict | None = None
     notes: list[str] = field(default_factory=list)
 
     def to_json(self, path: Path) -> None:
@@ -81,11 +83,12 @@ def run_prediction(
     include_goalscorers: bool = True,
     include_sensitivity: bool = True,
     include_backtest: bool = True,
+    include_bootstrap: bool = True,
     make_plots: bool = True,
     verbose: bool = True,
 ) -> PredictionReport:
     from .simulate import SeasonSimulator
-    from .ensemble import run_ensemble
+    from .ensemble import run_ensemble, bootstrap_promotion
 
     def _say(*a):
         if verbose:
@@ -121,6 +124,17 @@ def run_prediction(
     sim = SeasonSimulator(model, group, target=target)
     result = sim.run(n_sims=n_sims)
     _say("      " + result.summary().replace("\n", "\n      "))
+
+    bootstrap_dict = None
+    if include_bootstrap:
+        _say("      bootstrapping parameter uncertainty …")
+        try:
+            bootstrap_dict = bootstrap_promotion(matches, group, target=target)
+            _say(f"      parameter-uncertainty 90% CI: "
+                 f"{bootstrap_dict['ci90'][0]:.1%}–{bootstrap_dict['ci90'][1]:.1%} "
+                 f"(mean {bootstrap_dict['mean']:.1%})")
+        except Exception as exc:
+            notes.append(f"Bootstrap skipped: {exc}")
 
     # ---- squad + goalscorers ------------------------------------------- #
     squad_records, goalscorers, anytime, pichichi, crosscheck = [], [], [], [], []
@@ -236,6 +250,7 @@ def run_prediction(
         strength_rank_in_group=_group_strength_rank(model, group, target),
         strength_agreement=ens.strength_agreement,
         group=group, newcomers=newcomers,
+        projected_table=result.league_table or [],
         model_params={
             "half_life_days": half_life_days, "l2": l2,
             "home_advantage": round(model.home, 4), "mu": round(model.mu, 4),
@@ -248,7 +263,7 @@ def run_prediction(
         squad=squad_records, goalscorers=goalscorers, anytime_scorers=anytime,
         pichichi_race=pichichi, goleadores_crosscheck=crosscheck,
         sensitivity=sensitivity_records, form=form,
-        backtest=backtest_dict, notes=notes,
+        backtest=backtest_dict, bootstrap=bootstrap_dict, notes=notes,
     )
     config.MODELS_DIR.mkdir(parents=True, exist_ok=True)
     report.to_json(config.MODELS_DIR / "prediction.json")
@@ -291,6 +306,14 @@ def _write_markdown(report, model, result, path: Path) -> None:
         f"> **{report.promotion_probability:.1%}** probability of promotion "
         f"(ensemble range **{lo:.1%}–{hi:.1%}**; primary-model Monte-Carlo SE "
         f"±{report.monte_carlo_se:.1%}, {result.n_sims:,} sims).", "",
+    ]
+    if report.bootstrap:
+        b = report.bootstrap
+        L += [f"> Accounting for **parameter uncertainty** (bootstrap, {b['n_boot']} "
+              f"resamples), the honest 90% interval is **{b['ci90'][0]:.1%}–{b['ci90'][1]:.1%}** "
+              f"(mean {b['mean']:.1%}) — much wider, because tier-5 ratings are estimated "
+              f"from small samples. Read the headline as a central estimate, not a precise number.", ""]
+    L += [
         "| Route | Probability |", "|---|---|",
         f"| Direct (champion) | {report.p_direct:.1%} |",
         f"| Reached play-off (2nd–5th) | {report.p_playoff_reached:.1%} |",
@@ -321,6 +344,15 @@ def _write_markdown(report, model, result, path: Path) -> None:
     for i, r in strength.iterrows():
         L.append(f"| {i+1} | {r['team']} | {r['attack']:+.2f} | "
                  f"{r['defense']:+.2f} | {r['net_strength']:+.2f} |")
+
+    if report.projected_table:
+        L += ["", "## Projected final table (mean over simulations)", "",
+              "| # | Team | Mean pts | Mean pos | P(champion) | P(top-5) |",
+              "|---|---|---|---|---|---|"]
+        for i, r in enumerate(report.projected_table, 1):
+            mark = " **←**" if r.get("is_target") else ""
+            L.append(f"| {i} | {r['team']}{mark} | {r['mean_points']} | "
+                     f"{r['mean_position']} | {r['p_champion']:.0%} | {r['p_top5']:.0%} |")
 
     if report.goalscorers:
         L += ["", "## Predicted goalscorers — CD Binéfar", "",

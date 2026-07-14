@@ -18,8 +18,10 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
 > ### 🎯 Headline (2026-07-14, season 26/27)
 > **~8% probability of promotion** to Segunda Federación
 > (**ensemble range 6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50k sims).
-> Mean projected finish **5.5th of 18**; ~53% chance of reaching the play-off.
-> Predicted top scorer: **Adrià de Mesa (~13 goals)**.
+> Accounting for **parameter uncertainty** (bootstrap), the honest 90% interval
+> is **~1.5%–23%** — tier-5 ratings come from small samples, so the true spread is
+> wide. Mean projected finish **5.5th of 18**; ~53% chance of reaching the play-off.
+> Predicted top scorer: **Adrià de Mesa (~12 goals)**.
 >
 > Full breakdown & plots: [`models/report.md`](models/report.md).
 
@@ -175,6 +177,29 @@ Outputs land in `models/`: `prediction.json`, `report.md`, and 5 PNG plots.
 * **Play-off** — territorial bracket simulated explicitly (single-match semis +
   final, home to higher seed); winner promoted with `NATIONAL_PHASE_CONVERSION`.
 * **Tie-breakers** — points → goal difference → goals for.
+
+## How it compares to other open-source football predictors
+
+I surveyed comparable projects (penaltyblog, soccerdata, ScraperFC, FiveThirtyEight's
+SPI, vickyfriss/football-league-predictions, salikfaisal's season projections,
+Reymes/football-match-prediction, octosport/octopy, react-soccer-lineup) and folded
+the best ideas in:
+
+* **Adopted from the engine field** — an independent-Poisson ensemble member and
+  pi-ratings (penaltyblog / the ratings literature); **bootstrapped parameter
+  uncertainty** propagated into the promotion probability (the fix for the
+  over-confidence that point-estimate Monte-Carlo sims suffer); a **champion
+  backtest** as a headline reality check.
+* **Adopted from the UI field** — a **FiveThirtyEight-style finishing-position
+  heatmap** (team × position, saturation-coded, sortable) and a full projected
+  table; a formation pitch with per-player detail (react-soccer-lineup idea).
+* **Where this project is ahead** — none of the surveyed repos combine a proper
+  promotion **play-off-bracket** season simulator with a **Dirichlet-multinomial
+  goalscorer** model; both are here.
+* **Deliberately skipped as overkill for tier-5 data** — xG/event-stream models,
+  heavy gradient-boosting, full Stan/PyMC NUTS, and bookmaker-beating/ROI harnesses
+  (odds markets barely exist for this division). See the loop notes in the commit
+  history for the full discussion.
 
 ## Limitations & honest caveats
 

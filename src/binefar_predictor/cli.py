@@ -27,6 +27,7 @@ def _cmd_predict(args) -> None:
         include_goalscorers=not args.no_goalscorers,
         include_sensitivity=not args.no_sensitivity,
         include_backtest=not args.no_backtest,
+        include_bootstrap=not args.no_bootstrap,
         make_plots=not args.no_plots,
     )
     print("\n" + "=" * 70)
@@ -94,6 +95,7 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument("--no-goalscorers", action="store_true")
     pp.add_argument("--no-sensitivity", action="store_true")
     pp.add_argument("--no-backtest", action="store_true")
+    pp.add_argument("--no-bootstrap", action="store_true")
     pp.add_argument("--no-plots", action="store_true")
     pp.set_defaults(func=_cmd_predict)
 

@@ -52,6 +52,7 @@ class SimulationResult:
     teams: list[str]
     target_goals_for: np.ndarray = None  # (n_sims,) simulated goals scored
     all_goals_for: np.ndarray = None     # (n_teams, n_sims) goals for every team
+    league_table: list = None            # projected table: per-team aggregates
 
     def summary(self) -> str:
         lines = [
@@ -203,6 +204,32 @@ class SeasonSimulator:
         ti = self.idx[self.team_name]
         target_rank = rank[ti]                          # (n_sims,)
 
+        # Projected full-league table: per-team aggregates across all sims.
+        mean_pts = points.mean(axis=1)
+        mean_pos = rank.mean(axis=1)
+        p_champ = (rank == 1).mean(axis=1)
+        p_top5 = (rank <= (1 + config.PLAYOFF_SLOTS)).mean(axis=1)
+        league_table = sorted(
+            (
+                {
+                    "team": self.teams[i],
+                    "mean_points": round(float(mean_pts[i]), 1),
+                    "mean_position": round(float(mean_pos[i]), 1),
+                    "p_champion": round(float(p_champ[i]), 3),
+                    "p_top5": round(float(p_top5[i]), 3),
+                    "is_target": self.teams[i] == self.team_name,
+                    # full finishing-position distribution (for the heatmap)
+                    "pos_dist": [
+                        round(float(x), 4)
+                        for x in np.bincount(rank[i], minlength=self.n + 1)[1:self.n + 1]
+                        / n_sims
+                    ],
+                }
+                for i in range(self.n)
+            ),
+            key=lambda r: -r["mean_points"],
+        )
+
         # -- promotion resolution ----------------------------------------- #
         promoted = np.zeros(n_sims, dtype=bool)
         is_champion = target_rank == 1
@@ -252,6 +279,7 @@ class SeasonSimulator:
             teams=self.teams,
             target_goals_for=gf[ti].copy(),
             all_goals_for=gf.copy(),
+            league_table=league_table,
         )
 
     def _simulate_playoffs(self, seed_team: np.ndarray, target_idx: int) -> np.ndarray:

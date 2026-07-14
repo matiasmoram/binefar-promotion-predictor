@@ -1,10 +1,12 @@
 # CD Binéfar — promotion forecast, 26/27
 
-**Generated:** 2026-07-14T14:30:25.807030+00:00
+**Generated:** 2026-07-14T14:44:06.943920+00:00
 
 ## Headline
 
 > **7.8%** probability of promotion (ensemble range **6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50,000 sims).
+
+> Accounting for **parameter uncertainty** (bootstrap, 40 resamples), the honest 90% interval is **1.4%–22.6%** (mean 9.6%) — much wider, because tier-5 ratings are estimated from small samples. Read the headline as a central estimate, not a precise number.
 
 | Route | Probability |
 |---|---|
@@ -55,6 +57,29 @@ Teams promoted up from Regional Preferente Aragón (real names where resolvable;
 | 15 | Illueca CF | -0.05 | +0.17 | -0.22 |
 | 16 | CD Cariñena | -0.02 | +0.24 | -0.25 |
 
+## Projected final table (mean over simulations)
+
+| # | Team | Mean pts | Mean pos | P(champion) | P(top-5) |
+|---|---|---|---|---|---|
+| 1 | CA Monzón | 65.0 | 2.2 | 43% | 96% |
+| 2 | CD Cuarte | 64.3 | 2.4 | 36% | 95% |
+| 3 | SD Huesca B | 56.5 | 4.5 | 8% | 72% |
+| 4 | CF Epila | 55.9 | 4.8 | 6% | 68% |
+| 5 | CD Binéfar **←** | 53.9 | 5.5 | 4% | 58% |
+| 6 | CD Caspe | 50.6 | 6.9 | 2% | 38% |
+| 7 | AD Almudevar | 45.3 | 9.5 | 0% | 15% |
+| 8 | CDJ Tamarite | 44.3 | 10.1 | 0% | 12% |
+| 9 | CD La Almunia | 44.2 | 10.1 | 0% | 12% |
+| 10 | UD Fraga | 43.9 | 10.3 | 0% | 11% |
+| 11 | Robres CD | 41.6 | 11.4 | 0% | 6% |
+| 12 | CD Belchite 97 | 40.3 | 12.1 | 0% | 4% |
+| 13 | Andorra CF | 40.1 | 12.2 | 0% | 4% |
+| 14 | CD Brea | 38.0 | 13.3 | 0% | 2% |
+| 15 | Illueca CF | 37.3 | 13.6 | 0% | 2% |
+| 16 | Internacional Huesca | 36.6 | 14.0 | 0% | 1% |
+| 17 | Atlético Calatayud | 36.6 | 14.0 | 0% | 1% |
+| 18 | CD Cariñena | 36.3 | 14.1 | 0% | 1% |
+
 ## Predicted goalscorers — CD Binéfar
 
 | Player | Pos | Goals 25/26 | Exp goals 26/27 | P10–P90 | P(team top scorer) |
@@ -77,9 +102,9 @@ Teams promoted up from Regional Preferente Aragón (real names where resolvable;
 | Player (team) | Exp goals | P(pichichi) |
 |---|---|---|
 | Youssef (CA Monzón) | 20.93 | 81% |
-| De Mesa (CD Binéfar) | 10.24 | 3% |
+| Chicho (CD Binéfar) | 10.24 | 3% |
 | Alberto (Andorra CF) | 10.49 | 3% |
-| Chicho (CD Binéfar) | 10.26 | 3% |
+| De Mesa (CD Binéfar) | 10.26 | 3% |
 | Bernárdez (CA Monzón) | 9.81 | 3% |
 | Tapia (CD Cuarte) | 8.67 | 1% |
 | Jorge (CD Cuarte) | 8.67 | 1% |

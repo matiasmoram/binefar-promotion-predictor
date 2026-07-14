@@ -54,6 +54,44 @@ def _member_configs() -> dict[str, dict]:
     }
 
 
+def bootstrap_promotion(
+    matches: pd.DataFrame,
+    group: list[str],
+    target: str = config.CLUB_NAME,
+    n_boot: int = 40,
+    n_sims: int = 3_000,
+    half_life_days: float = 365.0,
+    l2: float = 0.05,
+    seed: int = 99,
+) -> dict:
+    """Promotion probability with **parameter uncertainty** via the bootstrap.
+
+    A plain Monte-Carlo sim from point-estimate ratings captures only outcome
+    randomness, not the fact that the ratings are themselves estimated from a
+    finite (small, at tier 5) sample — so it is over-confident. Here we resample
+    matches with replacement, refit, and re-simulate ``n_boot`` times; the spread
+    of the resulting promotion probabilities is an honest estimate of that
+    parameter uncertainty. Returns mean and a 90% interval.
+    """
+    rng = np.random.default_rng(seed)
+    probs = []
+    n = len(matches)
+    for b in range(n_boot):
+        idx = rng.integers(0, n, size=n)
+        boot = matches.iloc[idx].reset_index(drop=True)
+        model = DixonColesModel(half_life_days=half_life_days, l2=l2).fit(boot)
+        res = SeasonSimulator(model, group, target=target, seed=int(rng.integers(1, 1_000_000))).run(n_sims=n_sims)
+        probs.append(res.p_promotion)
+    probs = np.array(probs)
+    return {
+        "n_boot": n_boot,
+        "mean": round(float(probs.mean()), 4),
+        "ci90": [round(float(np.percentile(probs, 5)), 4),
+                 round(float(np.percentile(probs, 95)), 4)],
+        "std": round(float(probs.std()), 4),
+    }
+
+
 def run_ensemble(
     matches: pd.DataFrame,
     group: list[str],
