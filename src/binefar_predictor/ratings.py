@@ -85,6 +85,60 @@ class EloModel:
 
 
 # =========================================================================== #
+# pi-ratings (Constantinou & Fenton, 2013)
+# =========================================================================== #
+@dataclass
+class PiRatingModel:
+    """Dynamic goal-difference ratings with separate home/away components.
+
+    Each team carries a home rating ``R_H`` and away rating ``R_A``. A match's
+    expected goal difference is ``psi(R_H_home) - psi(R_A_away)`` with
+    ``psi(R) = sign(R)·(10^(|R|/c) - 1)``. Errors update both ratings via
+    learning rates ``lambda`` (own venue) and ``gamma`` (cross venue). A
+    well-cited alternative to Elo that uses margins and venue splits — here it
+    serves as an independent strength cross-check.
+    """
+
+    lr: float = 0.06        # lambda: own-venue learning rate
+    gamma: float = 0.5      # cross-venue propagation
+    c: float = 3.0
+    b: float = 10.0
+    home_r: dict[str, float] = field(default_factory=dict)
+    away_r: dict[str, float] = field(default_factory=dict)
+
+    def _psi(self, r: float) -> float:
+        return math.copysign(self.b ** (abs(r) / self.c) - 1.0, r)
+
+    def fit(self, matches: pd.DataFrame) -> "PiRatingModel":
+        self.home_r, self.away_r = {}, {}
+        for row in matches.sort_values("timestamp").itertuples():
+            h, a = row.home, row.away
+            rh, ra = self.home_r.get(h, 0.0), self.away_r.get(a, 0.0)
+            pred_gd = self._psi(rh) - self._psi(ra)
+            obs_gd = row.home_goals - row.away_goals
+            e = obs_gd - pred_gd
+            mag = math.copysign(self.c * math.log10(1 + abs(e)), e)
+            # home team: home rating moves with the error; away rating gets gamma
+            self.home_r[h] = rh + self.lr * mag
+            self.away_r[h] = self.away_r.get(h, 0.0) + self.gamma * self.lr * mag
+            # away team: mirror (its error is -e)
+            self.away_r[a] = ra - self.lr * mag
+            self.home_r[a] = self.home_r.get(a, 0.0) - self.gamma * self.lr * mag
+        return self
+
+    def strength(self, team: str) -> float:
+        return self.home_r.get(team, 0.0) + self.away_r.get(team, 0.0)
+
+    def strength_table(self) -> pd.DataFrame:
+        teams = set(self.home_r) | set(self.away_r)
+        rows = [{"team": t, "home_r": self.home_r.get(t, 0.0),
+                 "away_r": self.away_r.get(t, 0.0), "pi_strength": self.strength(t)}
+                for t in teams]
+        return (pd.DataFrame(rows).sort_values("pi_strength", ascending=False)
+                .reset_index(drop=True))
+
+
+# =========================================================================== #
 # Dixon-Coles
 # =========================================================================== #
 def _dc_tau(
@@ -118,6 +172,7 @@ class DixonColesModel:
 
     half_life_days: float = 365.0
     l2: float = 0.05          # ridge shrinkage toward league average
+    fix_rho: float | None = None  # set to 0.0 for an independent-Poisson model
     max_goals: int = 15
     teams: list[str] = field(default_factory=list)
     attack: dict[str, float] = field(default_factory=dict)
@@ -175,14 +230,17 @@ class DixonColesModel:
             nll += self.l2 * (np.sum(attack ** 2) + np.sum(defense ** 2))
             return nll
 
+        rho0 = 0.0 if self.fix_rho is not None else -0.05
         x0 = np.concatenate(
-            [np.zeros(n), np.zeros(n), [0.25], [float(np.log(hg.mean() + 1e-6))], [-0.05]]
+            [np.zeros(n), np.zeros(n), [0.25], [float(np.log(hg.mean() + 1e-6))], [rho0]]
         )
         constraints = [
             {"type": "eq", "fun": lambda p: np.sum(p[:n])},          # sum attack = 0
             {"type": "eq", "fun": lambda p: np.sum(p[n : 2 * n])},   # sum defense = 0
         ]
-        bounds = [(-3, 3)] * (2 * n) + [(-1, 1), (-2, 2), (-0.2, 0.2)]
+        # fix_rho=0 pins rho -> independent double-Poisson (an ensemble member).
+        rho_bounds = (self.fix_rho, self.fix_rho) if self.fix_rho is not None else (-0.2, 0.2)
+        bounds = [(-3, 3)] * (2 * n) + [(-1, 1), (-2, 2), rho_bounds]
         with warnings.catch_warnings():
             # SLSQP occasionally probes just outside bounds then clips — benign.
             warnings.simplefilter("ignore", RuntimeWarning)

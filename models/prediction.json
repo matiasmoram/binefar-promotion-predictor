@@ -1,37 +1,53 @@
 {
   "club": "CD Binéfar",
   "target_season": "26/27",
-  "generated_at": "2026-07-14T10:35:16.498012+00:00",
+  "generated_at": "2026-07-14T11:44:59.348487+00:00",
   "n_matches_trained": 2860,
   "n_seasons": 9,
-  "promotion_probability": 0.0796,
-  "p_direct": 0.0418,
-  "p_playoff_reached": 0.537,
-  "p_playoff_won": 0.0934,
-  "monte_carlo_se": 0.003827893415444061,
-  "mean_position": 5.4704,
-  "mean_points": 54.2136,
+  "promotion_probability": 0.07799,
+  "promotion_range": [
+    0.06624,
+    0.08868
+  ],
+  "ensemble_members": {
+    "Dixon-Coles (hl=365d)": 0.07776,
+    "Dixon-Coles (hl=180d)": 0.06624,
+    "Dixon-Coles (hl=730d)": 0.08868,
+    "Independent Poisson": 0.07928
+  },
+  "p_direct": 0.04328,
+  "p_playoff_reached": 0.53378,
+  "p_playoff_won": 0.08902,
+  "monte_carlo_se": 0.0012012680100627004,
+  "mean_position": 5.52062,
+  "mean_points": 53.94766,
+  "mean_goals_for": 52.56924,
   "position_distribution": [
-    0.0418,
-    0.0886,
-    0.1386,
-    0.1562,
-    0.1536,
-    0.1252,
-    0.0876,
-    0.0678,
-    0.0428,
-    0.0338,
-    0.0204,
-    0.0148,
-    0.0114,
-    0.0072,
-    0.0046,
-    0.0036,
-    0.0008,
-    0.0012
+    0.04328,
+    0.0891,
+    0.1423,
+    0.15708,
+    0.1453,
+    0.1195,
+    0.08662,
+    0.06324,
+    0.04544,
+    0.0335,
+    0.02472,
+    0.01726,
+    0.01284,
+    0.00828,
+    0.0057,
+    0.00312,
+    0.00206,
+    0.00066
   ],
   "strength_rank_in_group": 5,
+  "strength_agreement": {
+    "Dixon-Coles vs Elo": 0.9,
+    "Dixon-Coles vs pi": 0.879,
+    "Elo vs pi": 0.974
+  },
   "group": [
     "CD Cuarte",
     "CA Monzón",
@@ -47,10 +63,16 @@
     "Robres CD",
     "CD Belchite 97",
     "CD Cariñena",
-    "Newcomer 1",
-    "Newcomer 2",
-    "Newcomer 3",
-    "Newcomer 4"
+    "UD Fraga",
+    "CD Brea",
+    "Internacional Huesca",
+    "Atlético Calatayud"
+  ],
+  "newcomers": [
+    "UD Fraga",
+    "CD Brea",
+    "Internacional Huesca",
+    "Atlético Calatayud"
   ],
   "model_params": {
     "half_life_days": 365.0,
@@ -60,9 +82,734 @@
     "rho": -0.0576,
     "national_phase_conversion": 0.4,
     "newcomer_net_strength_penalty": 0.25,
-    "elo_binefar": 1556.3
+    "elo_binefar": 1556.3,
+    "pi_binefar": 0.888
   },
-  "squad": [],
-  "backtest": null,
+  "squad": [
+    {
+      "name": "Andreu Lladonosa",
+      "position": "Goalkeeper",
+      "age": 22,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Adrià Cornellà",
+      "position": "Goalkeeper",
+      "age": 22,
+      "nationality": "Andorra",
+      "market_value_eur": null
+    },
+    {
+      "name": "Alex Sanz",
+      "position": "Centre-Back",
+      "age": 22,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Joel Guillén",
+      "position": "Centre-Back",
+      "age": 24,
+      "nationality": "Andorra",
+      "market_value_eur": null
+    },
+    {
+      "name": "Jan Rodríguez",
+      "position": "Centre-Back",
+      "age": 21,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Miguel Torguet",
+      "position": "Right-Back",
+      "age": 23,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Genís Cases",
+      "position": "Right-Back",
+      "age": 30,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Víctor Nevot",
+      "position": "Midfielder",
+      "age": 21,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Álex Rico",
+      "position": "Central Midfield",
+      "age": 24,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Ricky Ciruela",
+      "position": "Central Midfield",
+      "age": 25,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Vicente Torres",
+      "position": "Central Midfield",
+      "age": null,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Carlos Bernadó",
+      "position": "Central Midfield",
+      "age": 28,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Cesc Gómez",
+      "position": "Left Winger",
+      "age": 28,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Gerard Querol",
+      "position": "Right Winger",
+      "age": 21,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Chicho Barreda",
+      "position": "Second Striker",
+      "age": 32,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Adrià de Mesa",
+      "position": "Centre-Forward",
+      "age": 35,
+      "nationality": "Spain",
+      "market_value_eur": null
+    },
+    {
+      "name": "Izan Fernández",
+      "position": "Centre-Forward",
+      "age": 24,
+      "nationality": "Andorra",
+      "market_value_eur": null
+    },
+    {
+      "name": "Raúl Samitier",
+      "position": "Centre-Forward",
+      "age": 22,
+      "nationality": "Spain",
+      "market_value_eur": null
+    }
+  ],
+  "goalscorers": [
+    {
+      "player": "Adrià de Mesa",
+      "position": "Centre-Forward",
+      "goals_last_season": 14,
+      "new_or_scoreless": false,
+      "is_pen_taker": true,
+      "exp_goals": 11.92,
+      "p10": 7,
+      "p90": 17,
+      "p_team_top_scorer": 0.574
+    },
+    {
+      "player": "Chicho Barreda",
+      "position": "Second Striker",
+      "goals_last_season": 14,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 10.29,
+      "p10": 6,
+      "p90": 15,
+      "p_team_top_scorer": 0.354
+    },
+    {
+      "player": "Gerard Querol",
+      "position": "Right Winger",
+      "goals_last_season": 6,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 4.99,
+      "p10": 2,
+      "p90": 9,
+      "p_team_top_scorer": 0.031
+    },
+    {
+      "player": "Cesc Gómez",
+      "position": "Left Winger",
+      "goals_last_season": 5,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 4.41,
+      "p10": 1,
+      "p90": 8,
+      "p_team_top_scorer": 0.019
+    },
+    {
+      "player": "Raúl Samitier",
+      "position": "Centre-Forward",
+      "goals_last_season": 3,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 3.88,
+      "p10": 1,
+      "p90": 7,
+      "p_team_top_scorer": 0.012
+    },
+    {
+      "player": "(other/own goals)",
+      "position": null,
+      "goals_last_season": 0,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 3.1,
+      "p10": 1,
+      "p90": 6,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Álex Rico",
+      "position": "Central Midfield",
+      "goals_last_season": 4,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 3.07,
+      "p10": 1,
+      "p90": 6,
+      "p_team_top_scorer": 0.006
+    },
+    {
+      "player": "Genís Cases",
+      "position": "Right-Back",
+      "goals_last_season": 3,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 2.1,
+      "p10": 0,
+      "p90": 5,
+      "p_team_top_scorer": 0.002
+    },
+    {
+      "player": "Izan Fernández",
+      "position": "Centre-Forward",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 2.01,
+      "p10": 0,
+      "p90": 4,
+      "p_team_top_scorer": 0.001
+    },
+    {
+      "player": "Miguel Torguet",
+      "position": "Right-Back",
+      "goals_last_season": 2,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 1.49,
+      "p10": 0,
+      "p90": 4,
+      "p_team_top_scorer": 0.001
+    },
+    {
+      "player": "Víctor Nevot",
+      "position": "Midfielder",
+      "goals_last_season": 1,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 1.33,
+      "p10": 0,
+      "p90": 3,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Ricky Ciruela",
+      "position": "Central Midfield",
+      "goals_last_season": 1,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 1.23,
+      "p10": 0,
+      "p90": 3,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Alex Sanz",
+      "position": "Centre-Back",
+      "goals_last_season": 1,
+      "new_or_scoreless": false,
+      "is_pen_taker": false,
+      "exp_goals": 0.9,
+      "p10": 0,
+      "p90": 2,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Vicente Torres",
+      "position": "Central Midfield",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.61,
+      "p10": 0,
+      "p90": 2,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Carlos Bernadó",
+      "position": "Central Midfield",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.6,
+      "p10": 0,
+      "p90": 2,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Jan Rodríguez",
+      "position": "Centre-Back",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.28,
+      "p10": 0,
+      "p90": 1,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Joel Guillén",
+      "position": "Centre-Back",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.28,
+      "p10": 0,
+      "p90": 1,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Adrià Cornellà",
+      "position": "Goalkeeper",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.02,
+      "p10": 0,
+      "p90": 0,
+      "p_team_top_scorer": 0.0
+    },
+    {
+      "player": "Andreu Lladonosa",
+      "position": "Goalkeeper",
+      "goals_last_season": 0,
+      "new_or_scoreless": true,
+      "is_pen_taker": false,
+      "exp_goals": 0.02,
+      "p10": 0,
+      "p90": 0,
+      "p_team_top_scorer": 0.0
+    }
+  ],
+  "anytime_scorers": [
+    {
+      "player": "Chicho Barreda",
+      "p_anytime": 0.275
+    },
+    {
+      "player": "Adrià de Mesa",
+      "p_anytime": 0.241
+    },
+    {
+      "player": "Gerard Querol",
+      "p_anytime": 0.145
+    },
+    {
+      "player": "Cesc Gómez",
+      "p_anytime": 0.129
+    },
+    {
+      "player": "Raúl Samitier",
+      "p_anytime": 0.114
+    },
+    {
+      "player": "(other/own goals)",
+      "p_anytime": 0.092
+    },
+    {
+      "player": "Álex Rico",
+      "p_anytime": 0.092
+    },
+    {
+      "player": "Genís Cases",
+      "p_anytime": 0.063
+    },
+    {
+      "player": "Izan Fernández",
+      "p_anytime": 0.061
+    },
+    {
+      "player": "Miguel Torguet",
+      "p_anytime": 0.045
+    },
+    {
+      "player": "Víctor Nevot",
+      "p_anytime": 0.041
+    },
+    {
+      "player": "Ricky Ciruela",
+      "p_anytime": 0.038
+    }
+  ],
+  "pichichi_race": [
+    {
+      "player_team": "Youssef (CA Monzón)",
+      "exp_goals": 20.93,
+      "p_pichichi": 0.809
+    },
+    {
+      "player_team": "De Mesa (CD Binéfar)",
+      "exp_goals": 10.24,
+      "p_pichichi": 0.033
+    },
+    {
+      "player_team": "Alberto (Andorra CF)",
+      "exp_goals": 10.49,
+      "p_pichichi": 0.031
+    },
+    {
+      "player_team": "Chicho (CD Binéfar)",
+      "exp_goals": 10.26,
+      "p_pichichi": 0.03
+    },
+    {
+      "player_team": "Bernárdez (CA Monzón)",
+      "exp_goals": 9.81,
+      "p_pichichi": 0.028
+    },
+    {
+      "player_team": "Tapia (CD Cuarte)",
+      "exp_goals": 8.67,
+      "p_pichichi": 0.013
+    },
+    {
+      "player_team": "Jorge (CD Cuarte)",
+      "exp_goals": 8.67,
+      "p_pichichi": 0.012
+    },
+    {
+      "player_team": "Rotellar (CD Caspe)",
+      "exp_goals": 7.66,
+      "p_pichichi": 0.005
+    },
+    {
+      "player_team": "Seral (SD Huesca B)",
+      "exp_goals": 6.51,
+      "p_pichichi": 0.004
+    },
+    {
+      "player_team": "Hugo (CF Epila)",
+      "exp_goals": 6.44,
+      "p_pichichi": 0.003
+    },
+    {
+      "player_team": "Hamza (CD La Almunia)",
+      "exp_goals": 6.79,
+      "p_pichichi": 0.003
+    },
+    {
+      "player_team": "Alexis (CDJ Tamarite)",
+      "exp_goals": 5.82,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Balué (CDJ Tamarite)",
+      "exp_goals": 5.8,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Flo (CDJ Tamarite)",
+      "exp_goals": 5.82,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Peralta (CD Cuarte)",
+      "exp_goals": 5.83,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Calvo (SD Huesca B)",
+      "exp_goals": 5.7,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Solá (SD Huesca B)",
+      "exp_goals": 5.7,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Marín (CF Epila)",
+      "exp_goals": 5.84,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Querol (CD Binéfar)",
+      "exp_goals": 5.08,
+      "p_pichichi": 0.001
+    },
+    {
+      "player_team": "Raúl (Robres CD)",
+      "exp_goals": 5.89,
+      "p_pichichi": 0.001
+    }
+  ],
+  "goleadores_crosscheck": [
+    {
+      "rank": 4,
+      "player": "Chicho",
+      "team": "CD Binéfar",
+      "goals": 14
+    },
+    {
+      "rank": 6,
+      "player": "De Mesa",
+      "team": "CD Binéfar",
+      "goals": 14
+    },
+    {
+      "rank": 31,
+      "player": "Querol",
+      "team": "CD Binéfar",
+      "goals": 6
+    },
+    {
+      "rank": 42,
+      "player": "Cesc",
+      "team": "CD Binéfar",
+      "goals": 5
+    },
+    {
+      "rank": 64,
+      "player": "Rico",
+      "team": "CD Binéfar",
+      "goals": 4
+    },
+    {
+      "rank": 79,
+      "player": "Genís",
+      "team": "CD Binéfar",
+      "goals": 3
+    },
+    {
+      "rank": 80,
+      "player": "Samitier",
+      "team": "CD Binéfar",
+      "goals": 3
+    },
+    {
+      "rank": 116,
+      "player": "Torguet",
+      "team": "CD Binéfar",
+      "goals": 2
+    }
+  ],
+  "sensitivity": [
+    {
+      "parameter": "half_life_days",
+      "value": 180.0,
+      "p_promotion": 0.0668
+    },
+    {
+      "parameter": "half_life_days",
+      "value": 365.0,
+      "p_promotion": 0.0774
+    },
+    {
+      "parameter": "half_life_days",
+      "value": 540.0,
+      "p_promotion": 0.0883
+    },
+    {
+      "parameter": "half_life_days",
+      "value": 730.0,
+      "p_promotion": 0.0989
+    },
+    {
+      "parameter": "l2",
+      "value": 0.0,
+      "p_promotion": 0.0814
+    },
+    {
+      "parameter": "l2",
+      "value": 0.05,
+      "p_promotion": 0.0774
+    },
+    {
+      "parameter": "l2",
+      "value": 0.15,
+      "p_promotion": 0.0813
+    },
+    {
+      "parameter": "l2",
+      "value": 0.3,
+      "p_promotion": 0.0851
+    },
+    {
+      "parameter": "newcomer_penalty",
+      "value": 0.0,
+      "p_promotion": 0.0761
+    },
+    {
+      "parameter": "newcomer_penalty",
+      "value": 0.25,
+      "p_promotion": 0.0774
+    },
+    {
+      "parameter": "newcomer_penalty",
+      "value": 0.5,
+      "p_promotion": 0.0811
+    },
+    {
+      "parameter": "newcomer_penalty",
+      "value": 0.75,
+      "p_promotion": 0.0828
+    },
+    {
+      "parameter": "national_conversion",
+      "value": 0.2,
+      "p_promotion": 0.0599
+    },
+    {
+      "parameter": "national_conversion",
+      "value": 0.3,
+      "p_promotion": 0.069
+    },
+    {
+      "parameter": "national_conversion",
+      "value": 0.4,
+      "p_promotion": 0.0774
+    },
+    {
+      "parameter": "national_conversion",
+      "value": 0.55,
+      "p_promotion": 0.0909
+    },
+    {
+      "parameter": "national_conversion",
+      "value": 0.7,
+      "p_promotion": 0.1042
+    }
+  ],
+  "form": {
+    "by_venue": {
+      "away": {
+        "matches": 151,
+        "ppg": 1.13,
+        "gf": 1.15,
+        "ga": 1.33
+      },
+      "home": {
+        "matches": 148,
+        "ppg": 1.59,
+        "gf": 1.48,
+        "ga": 1.09
+      }
+    },
+    "by_season": {
+      "17/18": {
+        "matches": 38,
+        "points": 41,
+        "gf": 40,
+        "ga": 62
+      },
+      "19/20": {
+        "matches": 29,
+        "points": 41,
+        "gf": 34,
+        "ga": 30
+      },
+      "20/21": {
+        "matches": 26,
+        "points": 40,
+        "gf": 33,
+        "ga": 18
+      },
+      "2018": {
+        "matches": 38,
+        "points": 47,
+        "gf": 45,
+        "ga": 50
+      },
+      "21/22": {
+        "matches": 32,
+        "points": 56,
+        "gf": 54,
+        "ga": 30
+      },
+      "22/23": {
+        "matches": 30,
+        "points": 37,
+        "gf": 42,
+        "ga": 38
+      },
+      "23/24": {
+        "matches": 34,
+        "points": 38,
+        "gf": 36,
+        "ga": 50
+      },
+      "24/25": {
+        "matches": 38,
+        "points": 59,
+        "gf": 51,
+        "ga": 37
+      },
+      "25/26": {
+        "matches": 34,
+        "points": 48,
+        "gf": 58,
+        "ga": 47
+      }
+    },
+    "last10_ppg": 1.9,
+    "last10_record": {
+      "W": 6,
+      "D": 1,
+      "L": 3
+    }
+  },
+  "backtest": {
+    "n_matches": 2415,
+    "log_loss": 1.0341,
+    "brier": 0.6209,
+    "rps": 0.209,
+    "baseline_log_loss": 1.0828,
+    "baseline_brier": 0.6558,
+    "accuracy": 0.4754,
+    "calibration": {
+      "0.068": 0.151,
+      "0.156": 0.195,
+      "0.258": 0.278,
+      "0.351": 0.338,
+      "0.449": 0.431,
+      "0.547": 0.501,
+      "0.643": 0.652,
+      "0.746": 0.676,
+      "0.854": 0.8
+    }
+  },
   "notes": []
 }

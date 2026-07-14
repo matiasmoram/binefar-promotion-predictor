@@ -171,32 +171,60 @@ def load_snapshot(
     return matches, standings
 
 
+def fetch_promoted_teams(
+    n: int = 4,
+    client: SofascoreClient | None = None,
+) -> list[str]:
+    """Real teams promoted INTO Grupo 17 from Regional Preferente Aragón.
+
+    Reads the latest Regional Preferente standings (two groups) and returns the
+    top ``n`` teams by points across both — the actual newcomers to the target
+    season. Champions ascend automatically plus the best runners-up. Returns
+    ``[]`` on failure (caller falls back to generic placeholders).
+    """
+    client = client or SofascoreClient(verbose=False)
+    try:
+        seasons = client.list_seasons(config.REGIONAL_PREFERENTE_ID)
+        sid = seasons.get(next(iter(seasons)))  # most recent
+        st = client.standings(sid, tournament_id=config.REGIONAL_PREFERENTE_ID)
+        rows = []
+        for grp in st["standings"]:
+            for r in grp["rows"]:
+                rows.append((r["team"]["name"], r["points"], r["position"]))
+        # champions first, then by points
+        rows.sort(key=lambda x: (x[2] != 1, -x[1]))
+        return [name for name, _, _ in rows[:n]]
+    except Exception:
+        return []
+
+
 def project_target_group(
     latest_standings: pd.DataFrame,
     league_size: int = config.LEAGUE_SIZE,
     n_relegated: int = 3,
+    promoted_teams: list[str] | None = None,
     newcomer_prefix: str = "Newcomer",
 ) -> list[str]:
     """Best-effort composition of the *target* (upcoming) season's group.
 
-    The official group for 26/27 is not published while the transfer window is
-    open, so we reconstruct it: keep the teams that neither won direct promotion
-    (1st) nor were relegated (bottom ``n_relegated``) from the latest completed
-    season, then top up to ``league_size`` with generic newcomer placeholders
-    (promoted from Regional Preferente / dropped from Segunda Fed.). Newcomers
-    are rated as league-average-with-penalty by the simulator.
+    The official 26/27 group is unpublished during the transfer window, so we
+    reconstruct it: keep teams that neither won direct promotion (1st) nor were
+    relegated (bottom ``n_relegated``) last season, then add the real teams
+    promoted up from Regional Preferente (``promoted_teams``, e.g. UD Fraga,
+    CD Brea, Internacional Huesca, Atlético Calatayud). Any remaining slots are
+    filled with generic placeholders. Teams the ratings model has seen before
+    (Fraga, Brea have Tercera history) get real ratings; the rest get the
+    newcomer prior in the simulator.
     """
     st = latest_standings.sort_values("position")
     champion = st.iloc[0]["team"]
     relegated = set(st.iloc[-n_relegated:]["team"])
-    returning = [
-        t for t in st["team"]
-        if t != champion and t not in relegated
-    ]
-    newcomers = [
-        f"{newcomer_prefix} {i + 1}"
-        for i in range(max(0, league_size - len(returning)))
-    ]
+    returning = [t for t in st["team"] if t != champion and t not in relegated]
+
+    slots = max(0, league_size - len(returning))
+    newcomers = list(promoted_teams or [])[:slots]
+    while len(newcomers) < slots:
+        newcomers.append(f"{newcomer_prefix} {len(newcomers) + 1}")
     return returning + newcomers
 
 

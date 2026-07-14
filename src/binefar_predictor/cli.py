@@ -24,6 +24,8 @@ def _cmd_predict(args) -> None:
         prefer_snapshot=args.offline,
         force_refresh=args.refresh,
         include_squad=not args.no_squad,
+        include_goalscorers=not args.no_goalscorers,
+        include_sensitivity=not args.no_sensitivity,
         include_backtest=not args.no_backtest,
         make_plots=not args.no_plots,
     )
@@ -33,12 +35,16 @@ def _cmd_predict(args) -> None:
 
 
 def _cmd_scrape(args) -> None:
-    from . import data
+    from . import data, players as P
 
     matches, latest, _ = data.collect(force_refresh=args.refresh)
     data.save_snapshot(matches, latest)
     print(f"Cached {len(matches):,} matches; snapshot written to "
           f"{data.SNAPSHOT_PATH}")
+    if args.goals:
+        print("Scraping league goal incidents (this is slow) …")
+        goals = P.load_league_goals(force_refresh=args.refresh, prefer_cache=False)
+        print(f"Cached {len(goals):,} goal rows to {P.LEAGUE_GOALS_PATH}")
 
 
 def _cmd_backtest(args) -> None:
@@ -77,12 +83,15 @@ def build_parser() -> argparse.ArgumentParser:
     pp.add_argument("--offline", action="store_true", help="use bundled snapshot")
     pp.add_argument("--refresh", action="store_true", help="force re-download")
     pp.add_argument("--no-squad", action="store_true")
+    pp.add_argument("--no-goalscorers", action="store_true")
+    pp.add_argument("--no-sensitivity", action="store_true")
     pp.add_argument("--no-backtest", action="store_true")
     pp.add_argument("--no-plots", action="store_true")
     pp.set_defaults(func=_cmd_predict)
 
     ps = sub.add_parser("scrape", help="refresh cached data and snapshot")
     ps.add_argument("--refresh", action="store_true")
+    ps.add_argument("--goals", action="store_true", help="also scrape goal incidents")
     ps.set_defaults(func=_cmd_scrape)
 
     pb = sub.add_parser("backtest", help="walk-forward validation only")

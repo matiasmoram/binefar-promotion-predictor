@@ -125,6 +125,15 @@ class SofascoreClient:
             **kw,
         )
 
+    def incidents(self, event_id: int, **kw) -> dict | None:
+        """Match incidents — includes goals with scorer names (works at tier 5).
+
+        Line-ups and statistics are 404 at this level, but goal incidents carry
+        the scoring player, minute and side, which is enough for a goalscorer
+        model.
+        """
+        return self.get(f"event/{event_id}/incidents", **kw)
+
     def season_events(
         self,
         season_id: int,

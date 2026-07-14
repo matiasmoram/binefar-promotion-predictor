@@ -31,6 +31,10 @@ TRANSFERMARKT_CLUB_ID = 21551            # cd-binefar
 # Tercera Federación, Group 17 (Aragón) — tier 5 of the Spanish pyramid.
 UNIQUE_TOURNAMENT_ID = 11366
 
+# The tier below (Regional Preferente Aragón) — its top teams get promoted INTO
+# Grupo 17, so we read them to name the real newcomers for the target season.
+REGIONAL_PREFERENTE_ID = 19257
+
 # Sofascore season IDs for uniqueTournament 11366, verified 2026-07-14.
 # These rotate every August; ``SofascoreClient.list_seasons`` resolves them
 # dynamically. This map is a pinned fallback for offline / reproducible runs.

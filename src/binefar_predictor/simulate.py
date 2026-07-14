@@ -50,6 +50,8 @@ class SimulationResult:
     points_pctiles: dict[str, float]
     mean_position: float
     teams: list[str]
+    target_goals_for: np.ndarray = None  # (n_sims,) simulated goals scored
+    all_goals_for: np.ndarray = None     # (n_teams, n_sims) goals for every team
 
     def summary(self) -> str:
         lines = [
@@ -186,7 +188,10 @@ class SeasonSimulator:
         # Rank each simulation: points -> GD -> GF, with tiny noise to break
         # remaining exact ties randomly (models the coin-flip nature of h2h).
         noise = self.rng.random((self.n, n_sims)) * 1e-3
-        score = points * 1e6 + (gd + 500) * 1e2 + gf + noise
+        # Lexicographic key points -> GD -> GF. Spacing must dominate the next
+        # level: GD term *1e3 > max GF (~150); points *1e6 > max GD term
+        # ((gd+500)*1e3 <= ~6.5e5 < 1e6). Max points ~102 -> ~1.02e8, safe in f64.
+        score = points * 1e6 + (gd + 500) * 1e3 + gf + noise
         # position: 1 = best. argsort descending along team axis.
         order = np.argsort(-score, axis=0)             # team indices best->worst
         rank = np.empty((self.n, n_sims), dtype=np.int16)
@@ -245,6 +250,8 @@ class SeasonSimulator:
             },
             mean_position=float(target_rank.mean()),
             teams=self.teams,
+            target_goals_for=gf[ti].copy(),
+            all_goals_for=gf.copy(),
         )
 
     def _simulate_playoffs(self, seed_team: np.ndarray, target_idx: int) -> np.ndarray:
