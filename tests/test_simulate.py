@@ -60,6 +60,26 @@ def test_newcomer_gets_penalized_rating():
     assert sim._defense["Newcomer X"] > 0
 
 
+def test_league_table_aggregation():
+    teams = [f"T{i}" for i in range(8)]
+    model = _model_with_teams(teams, strong={"T0": 1.2})
+    res = SeasonSimulator(model, teams, target="T0", seed=4).run(n_sims=3000)
+    tbl = res.league_table
+    assert len(tbl) == len(teams)
+    # sorted by mean points, descending
+    pts = [r["mean_points"] for r in tbl]
+    assert pts == sorted(pts, reverse=True)
+    # exactly one row flagged as the target
+    assert sum(r["is_target"] for r in tbl) == 1
+    # each team's finishing-position distribution sums to ~1 over n teams
+    for r in tbl:
+        # values are rounded to 4 dp, so allow a small tolerance
+        assert abs(sum(r["pos_dist"]) - 1.0) < 5e-3
+        assert len(r["pos_dist"]) == len(teams)
+    # champion probabilities across the league sum to ~1
+    assert abs(sum(r["p_champion"] for r in tbl) - 1.0) < 0.02
+
+
 def test_target_must_be_in_group():
     teams = [f"T{i}" for i in range(6)]
     model = _model_with_teams(teams)

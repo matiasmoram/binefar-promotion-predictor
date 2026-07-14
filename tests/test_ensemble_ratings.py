@@ -43,3 +43,12 @@ def test_independent_poisson_still_orders_teams():
     dc0 = DixonColesModel(l2=0.01, fix_rho=0.0).fit(_synthetic())
     tbl = dc0.strength_table()
     assert tbl.iloc[0]["team"] == "A"
+
+
+def test_bootstrap_returns_valid_interval():
+    from binefar_predictor.ensemble import bootstrap_promotion
+    m = _synthetic(n=6)
+    teams = [chr(ord("A") + i) for i in range(6)]
+    bs = bootstrap_promotion(m, teams, target="A", n_boot=8, n_sims=800)
+    assert 0.0 <= bs["ci90"][0] <= bs["mean"] <= bs["ci90"][1] <= 1.0
+    assert bs["n_boot"] == 8
