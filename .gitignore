@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Data caches (raw HTTP responses / large intermediate files)
+data/raw/*.json
+data/raw/*.html
+!data/raw/.gitkeep
+
+# OS
+.DS_Store
+
+# Models (large binaries) — keep metrics/plots though
+models/*.pkl
+!models/.gitkeep
