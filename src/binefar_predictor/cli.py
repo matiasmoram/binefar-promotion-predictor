@@ -56,6 +56,14 @@ def _cmd_backtest(args) -> None:
     print(rep.summary())
 
 
+def _cmd_dashboard(args) -> None:
+    from .predict import build_dashboard
+
+    if build_dashboard():
+        from . import config
+        print(f"Built {config.PROJECT_ROOT/'web'/'index.html'} — open it in a browser.")
+
+
 def _cmd_squad(args) -> None:
     from . import transfermarkt as tm
 
@@ -99,6 +107,9 @@ def build_parser() -> argparse.ArgumentParser:
     pb.add_argument("--half-life", type=float, default=365.0, dest="half_life")
     pb.add_argument("--l2", type=float, default=0.05)
     pb.set_defaults(func=_cmd_backtest)
+
+    pdash = sub.add_parser("dashboard", help="rebuild web/index.html from prediction.json")
+    pdash.set_defaults(func=_cmd_dashboard)
 
     pq = sub.add_parser("squad", help="print the squad from Transfermarkt")
     pq.add_argument("--season", type=int, default=2025)

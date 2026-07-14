@@ -1,0 +1,430 @@
+
+<style>
+:root{
+  --bg:#eef1f7; --card:#ffffff; --card2:#f7f9fc; --fg:#0f1a33; --muted:#5b6577;
+  --line:#e1e6f0; --blue:#1b3fa0; --blue-soft:#dbe3fb; --gold:#c6871a;
+  --good:#1f9d57; --warn:#c98a12; --pitch1:#2f7d57; --pitch2:#276a49;
+  --shadow:0 1px 2px rgba(15,26,51,.06),0 8px 24px rgba(15,26,51,.06);
+  --radius:16px; --maxw:1120px;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#0a1122; --card:#121c34; --card2:#0f1830; --fg:#eaeefb; --muted:#93a0bd;
+  --line:#22304f; --blue:#6f92ff; --blue-soft:#1b294b; --gold:#f0b93f;
+  --good:#37c47f; --warn:#f0b93f; --pitch1:#1f5c40; --pitch2:#184a34;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+}}
+:root[data-theme="light"]{
+  --bg:#eef1f7; --card:#ffffff; --card2:#f7f9fc; --fg:#0f1a33; --muted:#5b6577;
+  --line:#e1e6f0; --blue:#1b3fa0; --blue-soft:#dbe3fb; --gold:#c6871a;
+  --good:#1f9d57; --warn:#c98a12; --pitch1:#2f7d57; --pitch2:#276a49;
+  --shadow:0 1px 2px rgba(15,26,51,.06),0 8px 24px rgba(15,26,51,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#0a1122; --card:#121c34; --card2:#0f1830; --fg:#eaeefb; --muted:#93a0bd;
+  --line:#22304f; --blue:#6f92ff; --blue-soft:#1b294b; --gold:#f0b93f;
+  --good:#37c47f; --warn:#f0b93f; --pitch1:#1f5c40; --pitch2:#184a34;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+.bf-root{
+  background:var(--bg); color:var(--fg); min-height:100vh;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+.bf-root *{font-variant-numeric:tabular-nums}
+.wrap{max-width:var(--maxw); margin:0 auto; padding:clamp(16px,3vw,32px)}
+.eyebrow{font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:700}
+h1,h2,h3{margin:0; text-wrap:balance; letter-spacing:-.01em}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
+.section{margin-top:clamp(20px,3.5vw,40px)}
+.section-h{display:flex; align-items:baseline; gap:12px; margin-bottom:14px}
+.section-h h2{font-size:clamp(18px,2.4vw,23px); font-weight:800}
+.section-h .note{color:var(--muted); font-size:13px}
+
+/* header */
+header.top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:14px}
+.crest{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(135deg,var(--blue),color-mix(in srgb,var(--blue) 60%,#000));
+  color:#fff;font-weight:900;font-size:20px;letter-spacing:-.03em;box-shadow:var(--shadow)}
+.brand h1{font-size:clamp(20px,2.6vw,26px); font-weight:900}
+.brand p{margin:2px 0 0; color:var(--muted); font-size:13px}
+.toggle{border:1px solid var(--line); background:var(--card); color:var(--fg);
+  border-radius:999px; padding:8px 14px; font-size:13px; cursor:pointer; font-weight:600}
+.toggle:hover{border-color:var(--blue)}
+
+/* hero */
+.hero{display:grid; grid-template-columns:minmax(260px,360px) 1fr; gap:18px; margin-top:22px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+.gauge-card{padding:22px; display:flex; flex-direction:column; align-items:center; text-align:center}
+.gauge-wrap{position:relative; width:210px; height:210px}
+.gauge-num{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center}
+.gauge-num b{font-size:44px; font-weight:900; letter-spacing:-.03em; line-height:1}
+.gauge-num span{color:var(--muted); font-size:12px; margin-top:4px}
+.gauge-sub{margin-top:14px; font-size:13px; color:var(--muted)}
+.gauge-sub b{color:var(--fg)}
+.tiles{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+@media(max-width:520px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{padding:16px}
+.tile .k{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700}
+.tile .v{font-size:26px; font-weight:800; margin-top:6px; letter-spacing:-.02em}
+.tile .s{font-size:12px; color:var(--muted); margin-top:2px}
+.route{grid-column:1/-1; padding:16px 18px; display:flex; gap:22px; flex-wrap:wrap; align-items:center}
+.route .rt{display:flex; flex-direction:column; gap:6px; min-width:150px; flex:1}
+.route .rt .lab{font-size:12px; color:var(--muted); display:flex; justify-content:space-between}
+.route .rt .lab b{color:var(--fg)}
+.bar{height:8px; border-radius:999px; background:var(--card2); overflow:hidden}
+.bar>i{display:block; height:100%; border-radius:999px}
+
+/* pitch */
+.pitch-grid{display:grid; grid-template-columns:1.5fr 1fr; gap:18px}
+@media(max-width:820px){.pitch-grid{grid-template-columns:1fr}}
+.pitch{position:relative; border-radius:var(--radius); overflow:hidden; padding:14px 10px;
+  background:
+    repeating-linear-gradient(0deg,var(--pitch1) 0 44px,var(--pitch2) 44px 88px);
+  min-height:520px; display:flex; flex-direction:column; justify-content:space-between; gap:6px}
+.pitch::before{content:""; position:absolute; inset:10px; border:2px solid rgba(255,255,255,.35); border-radius:10px; pointer-events:none}
+.pitch::after{content:""; position:absolute; left:50%; top:10px; bottom:10px; width:2px; transform:translateX(-50%); background:rgba(255,255,255,.001)}
+.pline{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; position:relative; z-index:1}
+.pline .rowlab{position:absolute; left:8px; top:-2px; font-size:10px; letter-spacing:.12em; color:rgba(255,255,255,.65); font-weight:700}
+.shirt{border:none; cursor:pointer; background:transparent; display:flex; flex-direction:column; align-items:center; gap:4px; width:74px; padding:4px}
+.disc{border-radius:50%; display:grid; place-items:center; color:#fff; font-weight:800;
+  background:linear-gradient(135deg,#fff,#e9eefc); color:var(--blue);
+  border:2px solid rgba(255,255,255,.9); box-shadow:0 4px 10px rgba(0,0,0,.25); transition:transform .12s}
+.shirt:hover .disc,.shirt:focus-visible .disc{transform:translateY(-3px) scale(1.05)}
+.shirt.pen .disc{outline:2px solid var(--gold); outline-offset:2px}
+.shirt .nm{color:#fff; font-size:11px; font-weight:700; text-shadow:0 1px 3px rgba(0,0,0,.5); max-width:74px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.shirt .gg{color:rgba(255,255,255,.85); font-size:10px; text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.legend-mini{display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); font-size:11px; position:relative; z-index:1; justify-content:center; padding-top:4px}
+.legend-mini i{background:#fff;border-radius:50%;display:inline-block;opacity:.9}
+
+/* player detail */
+.detail{padding:18px; display:flex; flex-direction:column; gap:12px}
+.detail .empty{color:var(--muted); font-size:14px; text-align:center; margin:auto 0}
+.detail h3{font-size:20px; font-weight:800}
+.detail .meta{color:var(--muted); font-size:13px}
+.pill{display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--blue-soft); color:var(--blue)}
+.pill.gold{background:color-mix(in srgb,var(--gold) 18%,transparent); color:var(--gold)}
+.dstats{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px}
+.dstat{background:var(--card2); border-radius:12px; padding:12px}
+.dstat .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-weight:700}
+.dstat .v{font-size:22px; font-weight:800; margin-top:3px}
+
+/* charts */
+.chart-row{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+@media(max-width:820px){.chart-row{grid-template-columns:1fr}}
+.chart-card{padding:18px}
+.hbars{display:flex; flex-direction:column; gap:9px; margin-top:4px}
+.hbar{display:grid; grid-template-columns:120px 1fr 42px; align-items:center; gap:10px; font-size:13px}
+.hbar .nm{color:var(--fg); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.hbar .track{background:var(--card2); border-radius:999px; height:14px; overflow:hidden}
+.hbar .track>i{display:block; height:100%; border-radius:999px; background:var(--gold)}
+.hbar .val{text-align:right; color:var(--muted); font-weight:700}
+.posbars{display:flex; align-items:flex-end; gap:3px; height:180px; margin-top:8px}
+.posbars .pb{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:5px; height:100%}
+.posbars .pb .col{width:100%; border-radius:5px 5px 0 0; background:var(--muted); min-height:2px; transition:filter .12s}
+.posbars .pb.po .col{background:var(--gold)}
+.posbars .pb.champ .col{background:var(--good)}
+.posbars .pb:hover .col{filter:brightness(1.12)}
+.posbars .pb .lab{font-size:9px; color:var(--muted)}
+tbl,.tbl{width:100%}
+table.tbl{border-collapse:collapse; width:100%; font-size:13px}
+table.tbl th{ text-align:left; color:var(--muted); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.06em; padding:6px 8px; border-bottom:1px solid var(--line)}
+table.tbl td{padding:7px 8px; border-bottom:1px solid var(--line)}
+table.tbl tr:last-child td{border-bottom:none}
+table.tbl .minibar{height:7px; border-radius:999px; background:var(--blue); display:inline-block; vertical-align:middle}
+.hl{background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.ens{display:flex; flex-direction:column; gap:10px}
+.ens .em{display:grid; grid-template-columns:170px 1fr 46px; gap:10px; align-items:center; font-size:13px}
+.ens .em .track{background:var(--card2); border-radius:999px; height:12px; overflow:hidden}
+.ens .em .track>i{display:block;height:100%;border-radius:999px;background:var(--blue)}
+.agree{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
+.chip{font-size:12px; background:var(--card2); border:1px solid var(--line); border-radius:999px; padding:5px 11px; color:var(--muted)}
+.chip b{color:var(--good)}
+.sens{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:4px}
+@media(max-width:720px){.sens{grid-template-columns:repeat(2,1fr)}}
+.sens .sp{background:var(--card2); border-radius:12px; padding:12px}
+.sens .sp .t{font-size:11px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.05em}
+.spark{display:flex; align-items:flex-end; gap:4px; height:56px; margin-top:8px}
+.spark .sc{flex:1; background:var(--blue); border-radius:3px 3px 0 0; min-height:3px; opacity:.85}
+.spark-x{display:flex; gap:4px; margin-top:4px}
+.spark-x span{flex:1; text-align:center; font-size:9px; color:var(--muted); overflow:hidden}
+footer{margin-top:40px; color:var(--muted); font-size:12.5px; line-height:1.6}
+footer b{color:var(--fg)}
+footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:10px}
+@media(max-width:720px){footer .cols{grid-template-columns:1fr}}
+.tooltip{position:fixed; z-index:50; pointer-events:none; background:var(--fg); color:var(--bg);
+  padding:6px 9px; border-radius:8px; font-size:12px; font-weight:600; opacity:0; transition:opacity .1s; box-shadow:var(--shadow); max-width:220px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="bf-root">
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="crest">CB</div>
+      <div>
+        <h1 id="clubName">CD Binéfar</h1>
+        <p id="subtitle">Promotion &amp; goalscorer forecast · Tercera Federación Grupo 17</p>
+      </div>
+    </div>
+    <button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐ Theme</button>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="card gauge-card">
+      <div class="eyebrow">Probability of promotion</div>
+      <div class="gauge-wrap" style="margin-top:12px">
+        <svg viewBox="0 0 120 120" width="210" height="210" id="gauge" aria-hidden="true"></svg>
+        <div class="gauge-num"><b id="promoNum">–</b><span>any route</span></div>
+      </div>
+      <div class="gauge-sub">Ensemble range <b id="promoRange">–</b><br>Monte-Carlo SE <b id="promoSE">–</b></div>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px">
+      <div class="tiles" id="tiles"></div>
+      <div class="card route" id="routeStrip"></div>
+    </div>
+  </div>
+
+  <!-- LINEUP -->
+  <section class="section">
+    <div class="section-h"><h2>Squad &amp; lineup</h2><span class="note">click a player · disc size = predicted goals · gold ring = penalty taker</span></div>
+    <div class="pitch-grid">
+      <div class="pitch" id="pitch"></div>
+      <div class="card detail" id="detail"><div class="empty">Select a player on the pitch to see their 26/27 projection.</div></div>
+    </div>
+  </section>
+
+  <!-- CHARTS -->
+  <section class="section">
+    <div class="chart-row">
+      <div class="card chart-card">
+        <div class="section-h"><h2>Predicted goalscorers</h2><span class="note">expected goals, 26/27</span></div>
+        <div class="hbars" id="goalscorers"></div>
+      </div>
+      <div class="card chart-card">
+        <div class="section-h"><h2>Finishing position</h2><span class="note">simulated distribution</span></div>
+        <div class="posbars" id="posbars"></div>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;color:var(--muted)">
+          <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--good)"></i> champion</span>
+          <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--gold)"></i> play-off (2–5)</span>
+          <span><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--muted)"></i> no promotion</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="chart-row">
+      <div class="card chart-card">
+        <div class="section-h"><h2>Pichichi race</h2><span class="note">top scorer of the whole group</span></div>
+        <div style="overflow-x:auto"><table class="tbl" id="pichichi"></table></div>
+      </div>
+      <div class="card chart-card">
+        <div class="section-h"><h2>Model ensemble</h2><span class="note">promotion probability by variant</span></div>
+        <div class="ens" id="ensemble"></div>
+        <div class="agree" id="agreement"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card chart-card">
+      <div class="section-h"><h2>Sensitivity</h2><span class="note">how the promotion probability moves with each modelling assumption</span></div>
+      <div class="sens" id="sensitivity"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div><b id="clubFoot">CD Binéfar</b> · new joiners this season: <span id="newcomers"></span></div>
+    <div class="cols">
+      <div><b>Method.</b> Ensemble of time-weighted Dixon-Coles / independent-Poisson goals models → Monte-Carlo season simulation (+ territorial play-off) → Dirichlet-multinomial goalscorer allocation. <span id="btline"></span></div>
+      <div><b>Data.</b> Sofascore (results, standings, goal incidents), Futbolme (goleadores), Transfermarkt (squad), Regional Preferente (promoted teams).</div>
+      <div><b>Caveats.</b> No xG/minutes exist at tier 5; goalscorer shares are shrunk hard. Promotion is a rare, high-variance event — read the number as a calibrated probability. <span id="genat"></span></div>
+    </div>
+  </footer>
+</div>
+<div class="tooltip" id="tooltip"></div>
+</div>
+
+<script>
+const DATA = {"club": "CD Binéfar", "season": "26/27", "generated_at": "2026-07-14T14:15:24.628612+00:00", "promotion": 0.07799, "range": [0.06624, 0.08868], "p_direct": 0.04328, "p_playoff_reached": 0.53378, "p_playoff_won": 0.08902, "se": 0.0012012680100627004, "mean_position": 5.52062, "mean_points": 53.94766, "mean_goals_for": 52.56924, "strength_rank": 5, "group_size": 18, "position_distribution": [0.04328, 0.0891, 0.1423, 0.15708, 0.1453, 0.1195, 0.08662, 0.06324, 0.04544, 0.0335, 0.02472, 0.01726, 0.01284, 0.00828, 0.0057, 0.00312, 0.00206, 0.00066], "ensemble_members": {"Dixon-Coles (hl=365d)": 0.07776, "Dixon-Coles (hl=180d)": 0.06624, "Dixon-Coles (hl=730d)": 0.08868, "Independent Poisson": 0.07928}, "strength_agreement": {"Dixon-Coles vs Elo": 0.9, "Dixon-Coles vs pi": 0.879, "Elo vs pi": 0.974}, "newcomers": ["UD Fraga", "CD Brea", "Internacional Huesca", "Atlético Calatayud"], "players": [{"name": "Andreu Lladonosa", "position": "Goalkeeper", "age": 22, "nationality": "Spain", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Adrià Cornellà", "position": "Goalkeeper", "age": 22, "nationality": "Andorra", "line": "GK", "exp_goals": 0.02, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Alex Sanz", "position": "Centre-Back", "age": 22, "nationality": "Spain", "line": "DEF", "exp_goals": 0.9, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.0}, {"name": "Joel Guillén", "position": "Centre-Back", "age": 24, "nationality": "Andorra", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Jan Rodríguez", "position": "Centre-Back", "age": 21, "nationality": "Spain", "line": "DEF", "exp_goals": 0.28, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Miguel Torguet", "position": "Right-Back", "age": 23, "nationality": "Spain", "line": "DEF", "exp_goals": 1.49, "p_top": 0.001, "goals_last": 2, "is_pen_taker": false, "new": false, "p_anytime": 0.045}, {"name": "Genís Cases", "position": "Right-Back", "age": 30, "nationality": "Spain", "line": "DEF", "exp_goals": 2.1, "p_top": 0.002, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.063}, {"name": "Víctor Nevot", "position": "Midfielder", "age": 21, "nationality": "Spain", "line": "MID", "exp_goals": 1.33, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.041}, {"name": "Álex Rico", "position": "Central Midfield", "age": 24, "nationality": "Spain", "line": "MID", "exp_goals": 3.07, "p_top": 0.006, "goals_last": 4, "is_pen_taker": false, "new": false, "p_anytime": 0.092}, {"name": "Ricky Ciruela", "position": "Central Midfield", "age": 25, "nationality": "Spain", "line": "MID", "exp_goals": 1.23, "p_top": 0.0, "goals_last": 1, "is_pen_taker": false, "new": false, "p_anytime": 0.038}, {"name": "Vicente Torres", "position": "Central Midfield", "age": null, "nationality": "Spain", "line": "MID", "exp_goals": 0.61, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Carlos Bernadó", "position": "Central Midfield", "age": 28, "nationality": "Spain", "line": "MID", "exp_goals": 0.6, "p_top": 0.0, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.0}, {"name": "Cesc Gómez", "position": "Left Winger", "age": 28, "nationality": "Spain", "line": "FWD", "exp_goals": 4.41, "p_top": 0.019, "goals_last": 5, "is_pen_taker": false, "new": false, "p_anytime": 0.129}, {"name": "Gerard Querol", "position": "Right Winger", "age": 21, "nationality": "Spain", "line": "FWD", "exp_goals": 4.99, "p_top": 0.031, "goals_last": 6, "is_pen_taker": false, "new": false, "p_anytime": 0.145}, {"name": "Chicho Barreda", "position": "Second Striker", "age": 32, "nationality": "Spain", "line": "FWD", "exp_goals": 10.29, "p_top": 0.354, "goals_last": 14, "is_pen_taker": false, "new": false, "p_anytime": 0.275}, {"name": "Adrià de Mesa", "position": "Centre-Forward", "age": 35, "nationality": "Spain", "line": "FWD", "exp_goals": 11.92, "p_top": 0.574, "goals_last": 14, "is_pen_taker": true, "new": false, "p_anytime": 0.241}, {"name": "Izan Fernández", "position": "Centre-Forward", "age": 24, "nationality": "Andorra", "line": "FWD", "exp_goals": 2.01, "p_top": 0.001, "goals_last": 0, "is_pen_taker": false, "new": true, "p_anytime": 0.061}, {"name": "Raúl Samitier", "position": "Centre-Forward", "age": 22, "nationality": "Spain", "line": "FWD", "exp_goals": 3.88, "p_top": 0.012, "goals_last": 3, "is_pen_taker": false, "new": false, "p_anytime": 0.114}], "goalscorers": [{"player": "Adrià de Mesa", "position": "Centre-Forward", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": true, "exp_goals": 11.92, "p10": 7, "p90": 17, "p_team_top_scorer": 0.574}, {"player": "Chicho Barreda", "position": "Second Striker", "goals_last_season": 14, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 10.29, "p10": 6, "p90": 15, "p_team_top_scorer": 0.354}, {"player": "Gerard Querol", "position": "Right Winger", "goals_last_season": 6, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.99, "p10": 2, "p90": 9, "p_team_top_scorer": 0.031}, {"player": "Cesc Gómez", "position": "Left Winger", "goals_last_season": 5, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 4.41, "p10": 1, "p90": 8, "p_team_top_scorer": 0.019}, {"player": "Raúl Samitier", "position": "Centre-Forward", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.88, "p10": 1, "p90": 7, "p_team_top_scorer": 0.012}, {"player": "Álex Rico", "position": "Central Midfield", "goals_last_season": 4, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 3.07, "p10": 1, "p90": 6, "p_team_top_scorer": 0.006}, {"player": "Genís Cases", "position": "Right-Back", "goals_last_season": 3, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 2.1, "p10": 0, "p90": 5, "p_team_top_scorer": 0.002}, {"player": "Izan Fernández", "position": "Centre-Forward", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 2.01, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Miguel Torguet", "position": "Right-Back", "goals_last_season": 2, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.49, "p10": 0, "p90": 4, "p_team_top_scorer": 0.001}, {"player": "Víctor Nevot", "position": "Midfielder", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.33, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Ricky Ciruela", "position": "Central Midfield", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 1.23, "p10": 0, "p90": 3, "p_team_top_scorer": 0.0}, {"player": "Alex Sanz", "position": "Centre-Back", "goals_last_season": 1, "new_or_scoreless": false, "is_pen_taker": false, "exp_goals": 0.9, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Vicente Torres", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.61, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Carlos Bernadó", "position": "Central Midfield", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.6, "p10": 0, "p90": 2, "p_team_top_scorer": 0.0}, {"player": "Jan Rodríguez", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Joel Guillén", "position": "Centre-Back", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.28, "p10": 0, "p90": 1, "p_team_top_scorer": 0.0}, {"player": "Adrià Cornellà", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}, {"player": "Andreu Lladonosa", "position": "Goalkeeper", "goals_last_season": 0, "new_or_scoreless": true, "is_pen_taker": false, "exp_goals": 0.02, "p10": 0, "p90": 0, "p_team_top_scorer": 0.0}], "pichichi": [{"player_team": "Youssef (CA Monzón)", "exp_goals": 20.93, "p_pichichi": 0.809}, {"player_team": "Chicho (CD Binéfar)", "exp_goals": 10.24, "p_pichichi": 0.033}, {"player_team": "Alberto (Andorra CF)", "exp_goals": 10.49, "p_pichichi": 0.031}, {"player_team": "De Mesa (CD Binéfar)", "exp_goals": 10.26, "p_pichichi": 0.03}, {"player_team": "Bernárdez (CA Monzón)", "exp_goals": 9.81, "p_pichichi": 0.028}, {"player_team": "Tapia (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.013}, {"player_team": "Jorge (CD Cuarte)", "exp_goals": 8.67, "p_pichichi": 0.012}, {"player_team": "Rotellar (CD Caspe)", "exp_goals": 7.66, "p_pichichi": 0.005}, {"player_team": "Seral (SD Huesca B)", "exp_goals": 6.51, "p_pichichi": 0.004}, {"player_team": "Hugo (CF Epila)", "exp_goals": 6.44, "p_pichichi": 0.003}, {"player_team": "Hamza (CD La Almunia)", "exp_goals": 6.79, "p_pichichi": 0.003}, {"player_team": "Balué (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Flo (CDJ Tamarite)", "exp_goals": 5.8, "p_pichichi": 0.002}, {"player_team": "Alexis (CDJ Tamarite)", "exp_goals": 5.82, "p_pichichi": 0.002}, {"player_team": "Peralta (CD Cuarte)", "exp_goals": 5.83, "p_pichichi": 0.002}, {"player_team": "Calvo (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Solá (SD Huesca B)", "exp_goals": 5.7, "p_pichichi": 0.002}, {"player_team": "Álvarez (CF Epila)", "exp_goals": 5.84, "p_pichichi": 0.002}, {"player_team": "Querol (CD Binéfar)", "exp_goals": 5.08, "p_pichichi": 0.001}, {"player_team": "Raúl (Robres CD)", "exp_goals": 5.89, "p_pichichi": 0.001}], "sensitivity": [{"parameter": "half_life_days", "value": 180.0, "p_promotion": 0.0668}, {"parameter": "half_life_days", "value": 365.0, "p_promotion": 0.0774}, {"parameter": "half_life_days", "value": 540.0, "p_promotion": 0.0883}, {"parameter": "half_life_days", "value": 730.0, "p_promotion": 0.0989}, {"parameter": "l2", "value": 0.0, "p_promotion": 0.0814}, {"parameter": "l2", "value": 0.05, "p_promotion": 0.0774}, {"parameter": "l2", "value": 0.15, "p_promotion": 0.0813}, {"parameter": "l2", "value": 0.3, "p_promotion": 0.0851}, {"parameter": "newcomer_penalty", "value": 0.0, "p_promotion": 0.0761}, {"parameter": "newcomer_penalty", "value": 0.25, "p_promotion": 0.0774}, {"parameter": "newcomer_penalty", "value": 0.5, "p_promotion": 0.0811}, {"parameter": "newcomer_penalty", "value": 0.75, "p_promotion": 0.0828}, {"parameter": "national_conversion", "value": 0.2, "p_promotion": 0.0599}, {"parameter": "national_conversion", "value": 0.3, "p_promotion": 0.069}, {"parameter": "national_conversion", "value": 0.4, "p_promotion": 0.0774}, {"parameter": "national_conversion", "value": 0.55, "p_promotion": 0.0909}, {"parameter": "national_conversion", "value": 0.7, "p_promotion": 0.1042}], "backtest": {"n_matches": 2415, "log_loss": 1.0341, "brier": 0.6209, "rps": 0.209, "baseline_log_loss": 1.0828, "baseline_brier": 0.6558, "accuracy": 0.4754, "calibration": {"0.068": 0.151, "0.156": 0.195, "0.258": 0.278, "0.351": 0.338, "0.449": 0.431, "0.547": 0.501, "0.643": 0.652, "0.746": 0.676, "0.854": 0.8}}, "model_params": {"half_life_days": 365.0, "l2": 0.05, "home_advantage": 0.2043, "mu": 0.0019, "rho": -0.0576, "national_phase_conversion": 0.4, "newcomer_net_strength_penalty": 0.25, "elo_binefar": 1556.3, "pi_binefar": 0.888}, "notes": []};
+const $ = (s,r=document)=>r.querySelector(s);
+const pct = x => (x*100).toFixed(1).replace(/\.0$/,'')+'%';
+const pct0 = x => Math.round(x*100)+'%';
+
+/* theme */
+(function(){
+  const root=document.documentElement, btn=$('#themeToggle');
+  btn.addEventListener('click',()=>{
+    const cur=root.getAttribute('data-theme')
+      || (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+    root.setAttribute('data-theme', cur==='dark'?'light':'dark');
+  });
+})();
+
+/* tooltip */
+const tip=$('#tooltip');
+function showTip(e,html){tip.innerHTML=html;tip.style.opacity=1;moveTip(e);}
+function moveTip(e){const p=12;tip.style.left=Math.min(e.clientX+p,innerWidth-tip.offsetWidth-8)+'px';tip.style.top=(e.clientY+p)+'px';}
+function hideTip(){tip.style.opacity=0;}
+
+/* header + hero */
+$('#clubName').textContent=DATA.club;
+$('#clubFoot').textContent=DATA.club;
+$('#subtitle').textContent=`Promotion & goalscorer forecast · Tercera Federación Grupo 17 · ${DATA.season}`;
+$('#promoNum').textContent=pct(DATA.promotion);
+$('#promoRange').textContent=`${pct(DATA.range[0])} – ${pct(DATA.range[1])}`;
+$('#promoSE').textContent='±'+pct(DATA.se);
+$('#newcomers').textContent=(DATA.newcomers||[]).join(', ')||'—';
+$('#genat').textContent='Generated '+new Date(DATA.generated_at).toISOString().slice(0,10)+'.';
+if(DATA.backtest){const b=DATA.backtest;$('#btline').textContent=`Walk-forward log-loss ${b.log_loss} vs ${b.baseline_log_loss} baseline (${b.n_matches.toLocaleString()} matches).`;}
+
+/* gauge (donut, value on a 0–20% context scale for legibility of a small p) */
+(function(){
+  const svg=$('#gauge'), C=60, R=48, circ=2*Math.PI*R;
+  const scaleMax=Math.max(0.2, DATA.range[1]*1.4);
+  const frac=Math.min(1, DATA.promotion/scaleMax);
+  const rlo=DATA.range[0]/scaleMax, rhi=DATA.range[1]/scaleMax;
+  const arc=(from,to,color,w,dash)=>{
+    const el=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    el.setAttribute('cx',C);el.setAttribute('cy',C);el.setAttribute('r',R);
+    el.setAttribute('fill','none');el.setAttribute('stroke',color);el.setAttribute('stroke-width',w);
+    el.setAttribute('stroke-linecap','round');
+    el.setAttribute('stroke-dasharray',`${circ*(to-from)} ${circ}`);
+    el.setAttribute('stroke-dashoffset',`${-circ*from}`);
+    el.setAttribute('transform',`rotate(-90 ${C} ${C})`);
+    if(dash)el.setAttribute('opacity',.35);
+    svg.appendChild(el);
+  };
+  arc(0,1,'var(--card2)',10);                 // track
+  arc(rlo,rhi,'var(--gold)',10,true);         // ensemble range (faint)
+  arc(0,frac,'var(--gold)',10);               // mean value
+})();
+
+/* tiles */
+const tiles=[
+  {k:'Mean finish',v:DATA.mean_position.toFixed(1),s:`of ${DATA.group_size} teams`},
+  {k:'Reach play-off',v:pct0(DATA.p_playoff_reached),s:'top-5 finish'},
+  {k:'Mean points',v:Math.round(DATA.mean_points),s:'over 34 games'},
+  {k:'Win title',v:pct(DATA.p_direct),s:'direct promotion'},
+  {k:'Goals scored',v:Math.round(DATA.mean_goals_for),s:'projected'},
+  {k:'Strength rank',v:'#'+DATA.strength_rank,s:`in the group`},
+];
+$('#tiles').innerHTML=tiles.map(t=>`<div class="card tile"><div class="k">${t.k}</div><div class="v">${t.v}</div><div class="s">${t.s}</div></div>`).join('');
+
+/* route strip */
+const routes=[
+  {lab:'Direct (champion)',v:DATA.p_direct,c:'var(--good)'},
+  {lab:'Reach play-off',v:DATA.p_playoff_reached,c:'var(--gold)'},
+  {lab:'Win territorial play-off',v:DATA.p_playoff_won,c:'var(--blue)'},
+];
+$('#routeStrip').innerHTML=routes.map(r=>`<div class="rt"><div class="lab"><span>${r.lab}</span><b>${pct(r.v)}</b></div><div class="bar"><i style="width:${Math.min(100,r.v*100/0.6)}%;background:${r.c}"></i></div></div>`).join('');
+
+/* pitch / lineup */
+(function(){
+  const lines=[['FWD','Forwards'],['MID','Midfield'],['DEF','Defence'],['GK','Goalkeepers']];
+  const maxG=Math.max(1,...DATA.players.map(p=>p.exp_goals));
+  const html=lines.map(([code,label])=>{
+    const ps=DATA.players.filter(p=>p.line===code).sort((a,b)=>b.exp_goals-a.exp_goals);
+    if(!ps.length)return '';
+    const chips=ps.map(p=>{
+      const sz=28+Math.round(26*Math.sqrt(p.exp_goals/maxG));
+      const init=p.name.split(' ').map(w=>w[0]).slice(0,2).join('').toUpperCase();
+      return `<button class="shirt${p.is_pen_taker?' pen':''}" data-name="${encodeURIComponent(p.name)}">
+        <span class="disc" style="width:${sz}px;height:${sz}px;font-size:${Math.max(10,sz/3)}px">${init}</span>
+        <span class="nm">${p.name}</span><span class="gg">${p.exp_goals.toFixed(1)} g</span></button>`;
+    }).join('');
+    return `<div class="pline"><span class="rowlab">${label}</span>${chips}</div>`;
+  }).join('');
+  $('#pitch').innerHTML=html+`<div class="legend-mini"><i style="width:8px;height:8px"></i>fewer goals&nbsp;&nbsp;<i style="width:16px;height:16px"></i>more goals</div>`;
+  $('#pitch').querySelectorAll('.shirt').forEach(b=>b.addEventListener('click',()=>{
+    showPlayer(decodeURIComponent(b.dataset.name));
+    $('#pitch').querySelectorAll('.shirt').forEach(s=>s.style.opacity=.6);
+    b.style.opacity=1;
+  }));
+})();
+/* default the detail panel to the top predicted scorer */
+(function(){const top=[...DATA.players].sort((a,b)=>b.exp_goals-a.exp_goals)[0]; if(top)showPlayer(top.name);})();
+
+function showPlayer(name){
+  const p=DATA.players.find(x=>x.name===name); if(!p)return;
+  const flag=p.nationality?` · ${p.nationality}`:'';
+  $('#detail').innerHTML=`
+    <div>
+      <h3>${p.name}</h3>
+      <div class="meta">${p.position||''}${p.age?` · ${p.age} yrs`:''}${flag}</div>
+      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+        ${p.is_pen_taker?'<span class="pill gold">Penalty taker</span>':''}
+        ${p.new?'<span class="pill">New / no goals last season</span>':''}
+        <span class="pill">Line: ${p.line}</span>
+      </div>
+    </div>
+    <div class="dstats">
+      <div class="dstat"><div class="k">Expected goals 26/27</div><div class="v">${p.exp_goals.toFixed(1)}</div></div>
+      <div class="dstat"><div class="k">Goals 25/26</div><div class="v">${p.goals_last}</div></div>
+      <div class="dstat"><div class="k">Team top scorer</div><div class="v">${pct0(p.p_top)}</div></div>
+      <div class="dstat"><div class="k">Scores in a match</div><div class="v">${pct0(p.p_anytime)}</div></div>
+    </div>`;
+}
+
+/* goalscorer bars */
+(function(){
+  const gs=DATA.goalscorers.slice(0,10);
+  const maxG=Math.max(1,...gs.map(g=>g.exp_goals));
+  $('#goalscorers').innerHTML=gs.map(g=>`
+    <div class="hbar" data-tip="${g.player}: ${g.exp_goals} exp goals · ${pct0(g.p_team_top_scorer)} to lead the team">
+      <span class="nm">${g.player}</span>
+      <span class="track"><i style="width:${g.exp_goals/maxG*100}%"></i></span>
+      <span class="val">${g.exp_goals.toFixed(1)}</span></div>`).join('');
+  $('#goalscorers').querySelectorAll('.hbar').forEach(el=>{
+    el.addEventListener('mousemove',e=>showTip(e,el.dataset.tip));el.addEventListener('mouseleave',hideTip);});
+})();
+
+/* position distribution */
+(function(){
+  const d=DATA.position_distribution, maxP=Math.max(...d);
+  $('#posbars').innerHTML=d.map((p,i)=>{
+    const pos=i+1, cls=pos===1?'champ':(pos<=5?'po':'');
+    return `<div class="pb ${cls}" data-tip="Finish ${pos}: ${pct(p)}"><div class="col" style="height:${p/maxP*100}%"></div><div class="lab">${pos}</div></div>`;
+  }).join('');
+  $('#posbars').querySelectorAll('.pb').forEach(el=>{
+    el.addEventListener('mousemove',e=>showTip(e,el.dataset.tip));el.addEventListener('mouseleave',hideTip);});
+})();
+
+/* pichichi table */
+(function(){
+  const p=DATA.pichichi.slice(0,10); if(!p.length){$('#pichichi').innerHTML='<tr><td>No data</td></tr>';return;}
+  const maxProb=Math.max(...p.map(x=>x.p_pichichi))||1;
+  $('#pichichi').innerHTML='<tr><th>Player (team)</th><th>Exp goals</th><th>P(top scorer)</th></tr>'+
+    p.map(x=>{const hl=x.player_team.includes(DATA.club)?' class="hl"':'';
+      return `<tr${hl}><td>${x.player_team}</td><td>${x.exp_goals.toFixed(1)}</td>
+      <td><span class="minibar" style="width:${Math.max(3,x.p_pichichi/maxProb*90)}px"></span> ${pct0(x.p_pichichi)}</td></tr>`;}).join('');
+})();
+
+/* ensemble */
+(function(){
+  const m=DATA.ensemble_members, vals=Object.values(m), mx=Math.max(...vals);
+  $('#ensemble').innerHTML=Object.entries(m).map(([k,v])=>`
+    <div class="em"><span>${k}</span><span class="track"><i style="width:${v/mx*100}%"></i></span><span style="text-align:right;color:var(--muted);font-weight:700">${pct(v)}</span></div>`).join('');
+  $('#agreement').innerHTML=Object.entries(DATA.strength_agreement||{}).map(([k,v])=>`<span class="chip">${k} <b>${(+v).toFixed(2)}</b></span>`).join('');
+})();
+
+/* sensitivity small multiples */
+(function(){
+  const rows=DATA.sensitivity; if(!rows.length){$('#sensitivity').innerHTML='';return;}
+  const params=[...new Set(rows.map(r=>r.parameter))];
+  const nice={half_life_days:'Rating memory (days)',l2:'Shrinkage (L2)',newcomer_penalty:'Newcomer penalty',national_conversion:'Play-off conversion'};
+  $('#sensitivity').innerHTML=params.map(pn=>{
+    const sub=rows.filter(r=>r.parameter===pn);
+    const mx=Math.max(...sub.map(s=>s.p_promotion)), mn=Math.min(...sub.map(s=>s.p_promotion));
+    const bars=sub.map(s=>{const h=mx===mn?60:20+80*((s.p_promotion-mn)/(mx-mn));
+      return `<div class="sc" style="height:${h}%" title="${s.value}: ${pct(s.p_promotion)}"></div>`;}).join('');
+    const xs=sub.map(s=>`<span>${s.value}</span>`).join('');
+    return `<div class="sp"><div class="t">${nice[pn]||pn}</div><div class="spark">${bars}</div><div class="spark-x">${xs}</div></div>`;
+  }).join('');
+})();
+
+window.addEventListener('scroll',hideTip,{passive:true});
+</script>

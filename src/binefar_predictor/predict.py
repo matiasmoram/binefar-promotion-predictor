@@ -235,9 +235,26 @@ def run_prediction(
     _write_markdown(report, model, result, config.MODELS_DIR / "report.md")
     if make_plots:
         _make_plots(report, model, result, group, config.MODELS_DIR)
+    build_dashboard()
     _say(f"\nSaved: {config.MODELS_DIR}/prediction.json, report.md"
-         + (", plots" if make_plots else ""))
+         + (", plots" if make_plots else "") + ", web/index.html")
     return report
+
+
+def build_dashboard() -> bool:
+    """(Re)build the interactive web dashboard from the latest prediction.json."""
+    try:
+        import importlib.util
+
+        path = config.PROJECT_ROOT / "web" / "build_dashboard.py"
+        spec = importlib.util.spec_from_file_location("build_dashboard", path)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        mod.build()
+        return True
+    except Exception as exc:
+        print(f"[dashboard] skipped: {exc}")
+        return False
 
 
 # --------------------------------------------------------------------------- #

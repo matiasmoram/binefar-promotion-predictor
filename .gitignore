@@ -18,3 +18,6 @@ data/raw/*.html
 # Models (large binaries) — keep metrics/plots though
 models/*.pkl
 !models/.gitkeep
+
+# playwright scratch
+web/.playwright-mcp/

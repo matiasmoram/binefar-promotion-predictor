@@ -27,6 +27,27 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
   <img src="models/position_distribution.png" width="80%">
 </p>
 
+## 🖥️ Interactive dashboard
+
+A self-contained, theme-aware web console — **inspect the squad on a pitch**
+(disc size = predicted goals, gold ring = penalty taker; click any player for
+their full 26/27 projection), read the promotion gauge, goalscorers, pichichi
+race, ensemble and sensitivity. Open [`web/index.html`](web/index.html) in any
+browser (or serve `web/` via GitHub Pages) — it is generated from
+`prediction.json` and needs no build step or network.
+
+```bash
+binefar-predict dashboard     # rebuild web/index.html from the latest prediction
+```
+
+<p align="center">
+  <img src="web/preview-light.png" width="88%">
+</p>
+<p align="center">
+  <img src="web/preview-dark.png" width="88%">
+  <br><em>Light and dark themes; the pitch and player detail panel are interactive.</em>
+</p>
+
 ---
 
 ## What it does (a lot)

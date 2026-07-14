@@ -1,7 +1,7 @@
 {
   "club": "CD Binéfar",
   "target_season": "26/27",
-  "generated_at": "2026-07-14T11:44:59.348487+00:00",
+  "generated_at": "2026-07-14T14:15:24.628612+00:00",
   "n_matches_trained": 2860,
   "n_seasons": 9,
   "promotion_probability": 0.07799,
@@ -481,7 +481,7 @@
       "p_pichichi": 0.809
     },
     {
-      "player_team": "De Mesa (CD Binéfar)",
+      "player_team": "Chicho (CD Binéfar)",
       "exp_goals": 10.24,
       "p_pichichi": 0.033
     },
@@ -491,7 +491,7 @@
       "p_pichichi": 0.031
     },
     {
-      "player_team": "Chicho (CD Binéfar)",
+      "player_team": "De Mesa (CD Binéfar)",
       "exp_goals": 10.26,
       "p_pichichi": 0.03
     },
@@ -531,17 +531,17 @@
       "p_pichichi": 0.003
     },
     {
-      "player_team": "Alexis (CDJ Tamarite)",
+      "player_team": "Balué (CDJ Tamarite)",
       "exp_goals": 5.82,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Balué (CDJ Tamarite)",
+      "player_team": "Flo (CDJ Tamarite)",
       "exp_goals": 5.8,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Flo (CDJ Tamarite)",
+      "player_team": "Alexis (CDJ Tamarite)",
       "exp_goals": 5.82,
       "p_pichichi": 0.002
     },
@@ -561,7 +561,7 @@
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Marín (CF Epila)",
+      "player_team": "Álvarez (CF Epila)",
       "exp_goals": 5.84,
       "p_pichichi": 0.002
     },
@@ -579,48 +579,48 @@
   "goleadores_crosscheck": [
     {
       "rank": 4,
-      "player": "Chicho",
-      "team": "CD Binéfar",
-      "goals": 14
-    },
-    {
-      "rank": 6,
       "player": "De Mesa",
       "team": "CD Binéfar",
       "goals": 14
     },
     {
-      "rank": 31,
+      "rank": 6,
+      "player": "Chicho",
+      "team": "CD Binéfar",
+      "goals": 14
+    },
+    {
+      "rank": 35,
       "player": "Querol",
       "team": "CD Binéfar",
       "goals": 6
     },
     {
-      "rank": 42,
+      "rank": 44,
       "player": "Cesc",
       "team": "CD Binéfar",
       "goals": 5
     },
     {
-      "rank": 64,
+      "rank": 68,
       "player": "Rico",
       "team": "CD Binéfar",
       "goals": 4
     },
     {
-      "rank": 79,
+      "rank": 81,
       "player": "Genís",
       "team": "CD Binéfar",
       "goals": 3
     },
     {
-      "rank": 80,
+      "rank": 94,
       "player": "Samitier",
       "team": "CD Binéfar",
       "goals": 3
     },
     {
-      "rank": 116,
+      "rank": 126,
       "player": "Torguet",
       "team": "CD Binéfar",
       "goals": 2
