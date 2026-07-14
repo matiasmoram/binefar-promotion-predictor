@@ -31,12 +31,13 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
 
 ## 🖥️ Interactive dashboard — [**live here**](https://matiasmoram.github.io/binefar-promotion-predictor/)
 
-A self-contained web console styled in **Claude / Anthropic's design language**
-(warm ivory & dark grounds, Claude coral accent, serif display + monospace
-labels; light and dark themes). **Inspect the squad on a pitch** — disc size =
-predicted goals, coral ring = penalty taker; click any player for their full
-26/27 projection — and read the promotion gauge, goalscorers, pichichi race,
-ensemble and sensitivity. Open [`web/index.html`](web/index.html) in any browser
+A self-contained web console with a bespoke **blue-and-white "floodlit"
+matchday identity** (CD Binéfar club colours, a condensed scoreboard display
+face, one club-red accent, night-match navy in dark mode) — its signature is an
+**"ascenso" ladder** that frames the forecast as the climb from tier 5 to tier 4.
+**Inspect the squad on a pitch** — disc size = predicted goals, red ring =
+penalty taker; click any player for their full 26/27 projection — and read the
+promotion gauge, goalscorers, pichichi race, ensemble and sensitivity. Open [`web/index.html`](web/index.html) in any browser
 (or serve `web/` via GitHub Pages); it is generated from `prediction.json` and
 needs no build step or network.
 
