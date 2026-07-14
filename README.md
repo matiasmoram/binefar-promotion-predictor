@@ -29,7 +29,7 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
   <img src="models/position_distribution.png" width="80%">
 </p>
 
-## 🖥️ Interactive dashboard
+## 🖥️ Interactive dashboard — [**live here**](https://matiasmoram.github.io/binefar-promotion-predictor/)
 
 A self-contained web console styled in **Claude / Anthropic's design language**
 (warm ivory & dark grounds, Claude coral accent, serif display + monospace
@@ -110,6 +110,14 @@ reality check: across 8 past seasons the model gave the *eventual champion* a
 them ~3.5th on average — real skill, with a couple of genuine upsets that reflect
 how low-signal this tier is. An ~8% calibrated probability with honest error bars
 is the goal, not false precision.
+
+**Model adequacy (why plain Poisson, not negative-binomial).** A common suggestion
+is to switch to a negative-binomial / zero-inflated model for over-dispersed,
+0-0-heavy lower-league scoring. I checked before adding complexity: the fitted
+model's Pearson dispersion statistic is **1.14** (≈1.0 = Poisson-consistent; >1.2
+would warrant NB), and the observed 0-0 rate (10.4%) essentially matches what the
+Dixon-Coles ρ correction already produces. So negative-binomial is **not**
+warranted here — it would add complexity for no measurable gain.
 
 <p align="center">
   <img src="models/group_strength.png" width="48%">
