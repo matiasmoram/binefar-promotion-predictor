@@ -153,6 +153,20 @@ table.tbl td{padding:7px 8px; border-bottom:1px solid var(--line)}
 table.tbl tr:last-child td{border-bottom:none}
 table.tbl .minibar{height:7px; border-radius:999px; background:var(--accent2); display:inline-block; vertical-align:middle}
 .hl{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+/* team explorer panel (click a projected-table row) */
+.teamx{background:var(--card2); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-bottom:14px; display:none}
+.teamx.on{display:block}
+.teamx .hd{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:10px}
+.teamx .hd .nm{font-family:var(--display); font-size:20px; font-weight:700; text-transform:uppercase; letter-spacing:.01em}
+.teamx .hd .chips{display:flex; gap:6px; flex-wrap:wrap; margin-left:auto}
+.teamx .chip{font-family:var(--mono); font-size:11px; padding:3px 8px; border-radius:6px; background:var(--card); border:1px solid var(--line); color:var(--muted)}
+.teamx .chip b{color:var(--fg)}
+.teamx .dist{display:flex; align-items:flex-end; gap:2px; height:90px}
+.teamx .dist .b{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; gap:3px}
+.teamx .dist .b .col{width:100%; border-radius:3px 3px 0 0; background:var(--accent2); min-height:2px}
+.teamx .dist .b.po .col{background:var(--accent)}
+.teamx .dist .b.ch .col{background:var(--good)}
+.teamx .dist .b .n{font-size:8px; color:var(--muted); font-family:var(--mono)}
 /* position heatmap strip */
 .heat{display:flex; gap:1px; min-width:230px}
 .heat .cell{flex:1; height:18px; border-radius:2px; position:relative}
@@ -274,7 +288,8 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
 
   <section class="section">
     <div class="card chart-card">
-      <div class="section-h"><h2>Projected final table</h2><span class="note">finishing-position probability heatmap · 50k simulated seasons · click headers to sort</span></div>
+      <div class="section-h"><h2>Projected final table</h2><span class="note">finishing-position probability heatmap · 50k simulated seasons · click a row to explore a team · click headers to sort</span></div>
+      <div class="teamx" id="teamx"></div>
       <div style="overflow-x:auto"><table class="tbl" id="projtable"></table></div>
     </div>
   </section>
@@ -498,7 +513,8 @@ function showPlayer(name){
     const head=`<tr><th>#</th><th data-k="team" style="cursor:pointer">Team</th><th>Finishing position 1 → ${n} (colour = probability)</th>${th}</tr>`;
     const body=sorted.map((r,i)=>{
       const hl=r.is_target?' class="hl"':'';
-      return `<tr${hl}><td style="color:var(--muted)">${i+1}</td><td>${r.team}</td>`+
+      return `<tr${hl} data-team="${encodeURIComponent(r.team)}" style="cursor:pointer" tabindex="0" role="button" aria-label="Explore ${r.team}">`+
+        `<td style="color:var(--muted)">${i+1}</td><td>${r.team}</td>`+
         `<td class="strip">${strip(r)}</td>`+
         `<td style="text-align:right">${r.mean_points.toFixed(1)}</td>`+
         `<td style="text-align:right">${pct0(r.p_champion)}</td>`+
@@ -509,8 +525,35 @@ function showPlayer(name){
       const k=h.dataset.k; if(k===sortKey)desc=!desc; else {sortKey=k;desc=(k!=='team'&&k!=='mean_position');} render();}));
     el.querySelectorAll('.cell').forEach(c=>{
       c.addEventListener('mousemove',e=>showTip(e,c.dataset.tip)); c.addEventListener('mouseleave',hideTip);});
+    el.querySelectorAll('tr[data-team]').forEach(tr=>{
+      const pick=()=>showTeam(decodeURIComponent(tr.dataset.team));
+      tr.addEventListener('click', pick);
+      tr.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault(); pick();}});
+    });
+  }
+
+  // team explorer: full finishing-position distribution for any clicked team
+  const byTeam=Object.fromEntries(rows.map(r=>[r.team,r]));
+  function showTeam(team){
+    const r=byTeam[team]; if(!r)return;
+    const mx=Math.max(...r.pos_dist)||1;
+    const bars=r.pos_dist.map((p,i)=>{
+      const pos=i+1, cls=pos===1?'ch':(pos<=5?'po':'');
+      return `<div class="b ${cls}" data-tip="Finish ${pos}: ${pct(p)}"><div class="col" style="height:${p/mx*100}%"></div><div class="n">${pos}</div></div>`;
+    }).join('');
+    const host=$('#teamx'); host.className='teamx on';
+    host.innerHTML=`<div class="hd"><span class="nm">${r.team}</span>
+      <span class="chips">
+        <span class="chip">mean pts <b>${r.mean_points.toFixed(1)}</b></span>
+        <span class="chip">mean finish <b>${r.mean_position.toFixed(1)}</b></span>
+        <span class="chip">P(champion) <b>${pct(r.p_champion)}</b></span>
+        <span class="chip">P(top-5) <b>${pct(r.p_top5)}</b></span>
+      </span></div><div class="dist">${bars}</div>`;
+    host.querySelectorAll('.b').forEach(b=>{
+      b.addEventListener('mousemove',e=>showTip(e,b.dataset.tip)); b.addEventListener('mouseleave',hideTip);});
   }
   render();
+  const tgt=rows.find(r=>r.is_target); if(tgt)showTeam(tgt.team);
 })();
 
 /* what-if slider — interpolates the server-precomputed strength curve */
