@@ -170,6 +170,12 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
   border-radius:999px; padding:8px 14px; font-size:12px; cursor:pointer; font-weight:600; font-family:var(--mono)}
 .toggle:hover{border-color:var(--accent)}
 
+/* auto-generated narrative summary */
+.lede{margin:20px 0 0; max-width:68ch; font-size:clamp(15px,1.7vw,18px); line-height:1.6;
+  color:var(--fg); text-wrap:pretty}
+.lede b{font-weight:700}
+.lede .em{color:var(--accent); font-weight:700}
+
 /* hero */
 .hero{display:grid; grid-template-columns:minmax(260px,360px) 1fr; gap:18px; margin-top:22px}
 @media(max-width:760px){.hero{grid-template-columns:1fr}}
@@ -334,6 +340,8 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
     <button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐ Theme</button>
   </header>
 
+  <p class="lede" id="lede"></p>
+
   <!-- HERO -->
   <div class="hero">
     <div class="card gauge-card">
@@ -464,6 +472,32 @@ if(DATA.bootstrap){const gs=document.querySelector('.gauge-sub');
 $('#newcomers').textContent=(DATA.newcomers||[]).join(', ')||'—';
 $('#genat').textContent='Generated '+new Date(DATA.generated_at).toISOString().slice(0,10)+'.';
 if(DATA.backtest){const b=DATA.backtest;$('#btline').textContent=`Walk-forward log-loss ${b.log_loss} vs ${b.baseline_log_loss} baseline (${b.n_matches.toLocaleString()} matches).`;}
+
+/* auto-generated plain-language summary (Opta-style storytelling) */
+(function(){
+  const promo=DATA.promotion, direct=DATA.p_direct, playoff=Math.max(0, promo-direct);
+  // Honest route framing: name the larger promotion path, or "evenly split".
+  // route clause always shows both promotion contributions (group vs play-off)
+  const gpart=`winning the group (${pct(direct)})`, ppart=`the play-off route (${pct(playoff)})`;
+  let route;
+  if (promo<=0) route='an outside shot at either route';
+  else if (Math.abs(direct-playoff) < 0.35*promo) route=`split roughly evenly between ${gpart} and ${ppart}`;
+  else if (direct>playoff) route=`mostly from ${gpart}, less from ${ppart}`;
+  else route=`mostly from ${ppart}, less from ${gpart}`;
+  const scorer=(DATA.goalscorers||[]).find(g=>!g.player.startsWith('(other'));
+  const scorerBit = scorer
+    ? ` <b>${scorer.player}</b> is the favourite for top scorer (~${Math.round(scorer.exp_goals)} goals).`
+    : '';
+  const band = DATA.bootstrap
+    ? ` It is a low-confidence call: allowing for small-sample noise, the honest range is <b>${pct(DATA.bootstrap.ci90[0])}–${pct(DATA.bootstrap.ci90[1])}</b>.`
+    : '';
+  $('#lede').innerHTML =
+    `<b>${DATA.club}</b> are projected to finish with a mean of <b>${DATA.mean_position.toFixed(1)}` +
+    ` of ${DATA.group_size}</b> (≈${Math.round(DATA.mean_points)} pts) in ${DATA.season}, ` +
+    `giving a <span class="em">${pct(promo)}</span> chance of promotion — ${route}. ` +
+    `They reach the top-five play-off ${pct0(DATA.p_playoff_reached)} of the time, but must then ` +
+    `win it and clear a national phase to go up.${scorerBit}${band}`;
+})();
 
 /* gauge (donut, value on a 0–20% context scale for legibility of a small p) */
 (function(){
