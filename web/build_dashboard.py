@@ -9,6 +9,7 @@ Run:  python web/build_dashboard.py
 """
 from __future__ import annotations
 
+import base64
 import json
 from pathlib import Path
 
@@ -16,6 +17,16 @@ ROOT = Path(__file__).resolve().parent.parent
 PRED = ROOT / "models" / "prediction.json"
 OUT_STANDALONE = ROOT / "web" / "index.html"
 OUT_BODY = ROOT / "web" / "_artifact_body.html"
+CREST = ROOT / "web" / "assets" / "crest.jpg"
+
+
+def _crest_data_uri() -> str:
+    """Inline the club crest as a data URI (works in both the standalone page
+    and the self-contained Artifact, which blocks relative image loads)."""
+    if not CREST.exists():
+        return ""
+    b64 = base64.b64encode(CREST.read_bytes()).decode()
+    return f"data:image/jpeg;base64,{b64}"
 
 
 def _line_of(position: str | None) -> str:
@@ -58,6 +69,7 @@ def build() -> None:
     pred = json.loads(PRED.read_text(encoding="utf-8"))
     data = {
         "club": pred["club"],
+        "crest": _crest_data_uri(),
         "season": pred["target_season"],
         "generated_at": pred["generated_at"],
         "promotion": pred["promotion_probability"],
@@ -109,65 +121,75 @@ _STANDALONE = """<!doctype html>
 # standalone shell and the Artifact wrapper.
 TEMPLATE = r"""
 <style>
-/* CD Binéfar "floodlit" identity: blue-and-white club colours (cool blue paper
-   in light, night-match navy in dark), one bold club-red accent, a condensed
-   scoreboard display face + monospace data. Deliberately NOT the cream/serif/
-   terracotta look. */
+/* CD Binéfar "match-control" identity: cinematic near-black navy stage, one hot
+   electric-blue accent (club blue) + crest-gold secondary, telemetry-HUD
+   instrument cells, condensed display + monospace data. Dark, single committed
+   world (à la the Damm cinematic aesthetic). */
 :root{
-  --bg:#e7ecf4; --card:#ffffff; --card2:#eef2f9; --fg:#0b1f44; --muted:#5b6a88;
-  --line:#d1dae8; --blue:#123f8c; --accent:#d1232b; --accent-soft:#f6dbdb; --accent2:#2f5eaa;
-  --good:#1f7a4d; --warn:#b0742a; --pitch1:#2f6d4a; --pitch2:#285f40;
-  --shadow:0 1px 2px rgba(11,31,68,.06),0 10px 26px rgba(11,31,68,.09);
-  --radius:10px; --maxw:1120px;
-  --display:"Arial Narrow","Roboto Condensed","Oswald","Bebas Neue","Helvetica Neue Condensed",Impact,system-ui,sans-serif;
+  --bg:#05070e; --card:#0b111d; --card2:#111a2b; --fg:#eef3fb; --muted:#8ea3c8;
+  --line:#20304a; --accent:#2f6bff; --accent-2:#6f9bff; --accent-soft:rgba(47,107,255,.14);
+  --blue:#3f78ff; --accent2:#e8b23a; --good:#2fd9ad; --warn:#e0a05a;
+  --pitch1:#123a28; --pitch2:#0d2c1e;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 16px 40px rgba(0,0,0,.5);
+  --glow:0 0 0 1px rgba(47,107,255,.25),0 0 24px rgba(47,107,255,.22);
+  --radius:12px; --maxw:1180px;
+  --display:"Archivo","Arial Narrow","Roboto Condensed","Oswald","Helvetica Neue Condensed",Impact,system-ui,sans-serif;
   --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
-}
-@media (prefers-color-scheme:dark){:root{
-  --bg:#0a1830; --card:#0f2143; --card2:#0c1c3a; --fg:#eaf1fc; --muted:#8ea3c8;
-  --line:#213458; --blue:#5b8bff; --accent:#ff5a5f; --accent-soft:#3a1b1e; --accent2:#6f9bff;
-  --good:#46b98a; --warn:#e0a05a; --pitch1:#20553a; --pitch2:#194630;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.45);
-}}
-:root[data-theme="light"]{
-  --bg:#e7ecf4; --card:#ffffff; --card2:#eef2f9; --fg:#0b1f44; --muted:#5b6a88;
-  --line:#d1dae8; --blue:#123f8c; --accent:#d1232b; --accent-soft:#f6dbdb; --accent2:#2f5eaa;
-  --good:#1f7a4d; --warn:#b0742a; --pitch1:#2f6d4a; --pitch2:#285f40;
-  --shadow:0 1px 2px rgba(11,31,68,.06),0 10px 26px rgba(11,31,68,.09);
-}
-:root[data-theme="dark"]{
-  --bg:#0a1830; --card:#0f2143; --card2:#0c1c3a; --fg:#eaf1fc; --muted:#8ea3c8;
-  --line:#213458; --blue:#5b8bff; --accent:#ff5a5f; --accent-soft:#3a1b1e; --accent2:#6f9bff;
-  --good:#46b98a; --warn:#e0a05a; --pitch1:#20553a; --pitch2:#194630;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 14px 34px rgba(0,0,0,.45);
+  --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,"JetBrains Mono","Liberation Mono",monospace;
 }
 *{box-sizing:border-box}
 .bf-root{
-  background:var(--bg); color:var(--fg); min-height:100vh;
+  background:
+    radial-gradient(1100px 620px at 78% -8%, rgba(47,107,255,.16), transparent 60%),
+    radial-gradient(900px 520px at 8% 4%, rgba(232,178,58,.07), transparent 55%),
+    var(--bg);
+  background-attachment:fixed;
+  color:var(--fg); min-height:100vh;
   font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;
 }
 .bf-root *{font-variant-numeric:tabular-nums}
 .wrap{max-width:var(--maxw); margin:0 auto; padding:clamp(16px,3vw,32px)}
 .eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600}
 h1,h2,h3{margin:0; text-wrap:balance; letter-spacing:-.01em; font-family:var(--display); font-weight:600}
-.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);
+  transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s}
+.card.chart-card:hover,.card.tile:hover,.card.gauge-card:hover{transform:translateY(-3px); border-color:color-mix(in srgb,var(--accent) 45%,var(--line)); box-shadow:var(--shadow),0 0 22px rgba(47,107,255,.10)}
 .section{margin-top:clamp(20px,3.5vw,40px)}
 .section-h{display:flex; align-items:baseline; gap:12px; margin-bottom:14px}
 .section-h h2{font-size:clamp(21px,2.6vw,27px); font-weight:700; text-transform:uppercase; letter-spacing:.02em}
 .section-h .note{color:var(--muted); font-size:13px}
+/* scroll-reveal */
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1; transform:none}
 
 /* header */
 header.top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
 .brand{display:flex; align-items:center; gap:14px}
-.crest{width:44px;height:52px;display:grid;place-items:center;
-  clip-path:polygon(0 0,100% 0,100% 68%,50% 100%,0 68%);
-  background:linear-gradient(160deg,var(--blue),color-mix(in srgb,var(--blue) 60%,#000));
-  color:#fff;font-weight:700;font-size:18px;letter-spacing:0;box-shadow:var(--shadow);font-family:var(--display)}
-.brand h1{font-size:clamp(23px,3vw,30px); font-weight:700; text-transform:uppercase; letter-spacing:.02em}
+.crest{width:52px;height:52px;object-fit:contain;border-radius:10px;
+  background:radial-gradient(circle at 50% 40%, #fff, #eef2f8);
+  padding:3px;box-shadow:var(--shadow),0 0 20px rgba(47,107,255,.18)}
+.brand h1{font-size:clamp(23px,3vw,31px); font-weight:700; text-transform:uppercase; letter-spacing:.02em}
 .brand p{margin:3px 0 0; color:var(--muted); font-size:13px; font-family:var(--mono); letter-spacing:.01em}
-.toggle{border:1px solid var(--line); background:var(--card); color:var(--fg);
-  border-radius:999px; padding:8px 14px; font-size:12px; cursor:pointer; font-weight:600; font-family:var(--mono)}
-.toggle:hover{border-color:var(--accent)}
+.livechip{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase;
+  display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:999px; padding:7px 13px; background:var(--card)}
+.livechip .dot{width:8px;height:8px;border-radius:50%;background:var(--good);box-shadow:0 0 10px var(--good);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* live ticker */
+.ticker{margin-top:16px; overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:9px 0; -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.ticker .track{display:inline-flex; gap:34px; white-space:nowrap; animation:tick 42s linear infinite; will-change:transform}
+.ticker:hover .track{animation-play-state:paused}
+.ticker .it{font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.04em}
+.ticker .it b{color:var(--fg)} .ticker .it .k{color:var(--accent)}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* loading / boot overlay */
+.boot{position:fixed; inset:0; z-index:100; background:var(--bg); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px; transition:opacity .6s ease}
+.boot.done{opacity:0; pointer-events:none}
+.boot img{width:76px;height:76px;object-fit:contain;border-radius:12px;background:radial-gradient(circle,#fff,#eef2f8);padding:5px;box-shadow:0 0 40px rgba(47,107,255,.35)}
+.boot .bar{width:min(280px,60vw); height:3px; background:var(--card2); border-radius:999px; overflow:hidden}
+.boot .bar>i{display:block; height:100%; width:0; background:var(--accent); box-shadow:0 0 12px var(--accent)}
+.boot .pctn{font-family:var(--mono); font-size:12px; color:var(--muted); letter-spacing:.2em}
 
 /* auto-generated narrative summary */
 .lede{margin:20px 0 0; max-width:68ch; font-size:clamp(15px,1.7vw,18px); line-height:1.6;
@@ -225,7 +247,7 @@ header.top{display:flex; align-items:center; justify-content:space-between; gap:
   background:linear-gradient(135deg,#ffffff,#dfe7f5); color:var(--blue);
   border:2px solid rgba(255,255,255,.9); box-shadow:0 4px 10px rgba(0,0,0,.3); transition:transform .12s}
 .shirt:hover .disc,.shirt:focus-visible .disc{transform:translateY(-3px) scale(1.05)}
-.shirt.pen .disc{outline:2px solid var(--accent); outline-offset:2px}
+.shirt.pen .disc{outline:2px solid var(--accent2); outline-offset:2px; box-shadow:0 0 12px rgba(232,178,58,.5)}
 .shirt .nm{color:#fff; font-size:11px; font-weight:700; text-shadow:0 1px 3px rgba(0,0,0,.5); max-width:74px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .shirt .gg{color:rgba(255,255,255,.85); font-size:10px; text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .legend-mini{display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.85); font-size:11px; position:relative; z-index:1; justify-content:center; padding-top:4px}
@@ -311,21 +333,29 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
 .tooltip{position:fixed; z-index:50; pointer-events:none; background:var(--fg); color:var(--bg);
   padding:6px 9px; border-radius:8px; font-size:12px; font-weight:600; opacity:0; transition:opacity .1s; box-shadow:var(--shadow); max-width:220px}
 :where(button,a,[tabindex]):focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}
+  .reveal{opacity:1!important; transform:none!important}}
 </style>
 
 <div class="bf-root">
+<div class="boot" id="boot">
+  <img id="bootCrest" alt="">
+  <div class="bar"><i id="bootBar"></i></div>
+  <div class="pctn" id="bootPct">0%</div>
+</div>
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <div class="crest">CB</div>
+      <img class="crest" id="crest" alt="CD Binéfar crest" width="52" height="52">
       <div>
         <h1 id="clubName">CD Binéfar</h1>
         <p id="subtitle">Promotion &amp; goalscorer forecast · Tercera Federación Grupo 17</p>
       </div>
     </div>
-    <button class="toggle" id="themeToggle" aria-label="Toggle colour theme">◐ Theme</button>
+    <div class="livechip"><span class="dot"></span> MODEL · <span id="genTag">—</span></div>
   </header>
+
+  <div class="ticker" id="ticker" aria-hidden="true"><div class="track" id="tickerTrack"></div></div>
 
   <p class="lede" id="lede"></p>
 
@@ -351,7 +381,7 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
 
   <!-- LINEUP -->
   <section class="section">
-    <div class="section-h"><h2>Squad &amp; lineup</h2><span class="note">click a player · disc size = predicted goals · red ring = penalty taker</span></div>
+    <div class="section-h"><h2>Squad &amp; lineup</h2><span class="note">click a player · disc size = predicted goals · gold ring = penalty taker</span></div>
     <div class="pitch-grid">
       <div class="pitch" id="pitch"></div>
       <div class="card detail" id="detail"><div class="empty">Select a player on the pitch to see their 26/27 projection.</div></div>
@@ -424,15 +454,22 @@ const $ = (s,r=document)=>r.querySelector(s);
 const pct = x => (x*100).toFixed(1).replace(/\.0$/,'')+'%';
 const pct0 = x => Math.round(x*100)+'%';
 
-/* theme */
-(function(){
-  const root=document.documentElement, btn=$('#themeToggle');
-  btn.addEventListener('click',()=>{
-    const cur=root.getAttribute('data-theme')
-      || (matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
-    root.setAttribute('data-theme', cur==='dark'?'light':'dark');
-  });
-})();
+/* motion engine: crest, count-up, scroll-reveal, reduced-motion aware */
+const RM = matchMedia('(prefers-reduced-motion:reduce)').matches;
+// failsafe: never leave the boot curtain up if any later JS throws
+setTimeout(()=>{const b=document.getElementById('boot'); if(b)b.classList.add('done');},2600);
+if(DATA.crest){ const c=$('#crest'); if(c)c.src=DATA.crest; const bc=$('#bootCrest'); if(bc)bc.src=DATA.crest; }
+{ const gt=$('#genTag'); if(gt) gt.textContent=new Date(DATA.generated_at).toISOString().slice(0,10); }
+function countUp(el,to,fmt,dur){ if(!el)return; if(RM){el.textContent=fmt(to);return;}
+  dur=dur||1100; const t0=performance.now();
+  const step=t=>{const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+    el.textContent=fmt(to*e); if(p<1)requestAnimationFrame(step); else el.textContent=fmt(to);};
+  requestAnimationFrame(step);
+}
+const _revObs = ('IntersectionObserver' in window && !RM)
+  ? new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');_revObs.unobserve(x.target);}}),{threshold:.12})
+  : null;
+function reveal(el){ if(!el)return; if(_revObs){el.classList.add('reveal');_revObs.observe(el);} }
 
 /* tooltip */
 const tip=$('#tooltip');
@@ -444,7 +481,7 @@ function hideTip(){tip.style.opacity=0;}
 $('#clubName').textContent=DATA.club;
 $('#clubFoot').textContent=DATA.club;
 $('#subtitle').textContent=`Promotion & goalscorer forecast · Tercera Federación Grupo 17 · ${DATA.season}`;
-$('#promoNum').textContent=pct(DATA.promotion);
+countUp($('#promoNum'), DATA.promotion, v=>pct(v), 1300);
 $('#promoRange').textContent=`${pct(DATA.range[0])} – ${pct(DATA.range[1])}`;
 $('#promoSE').textContent='±'+pct(DATA.se);
 if(DATA.bootstrap){const gs=document.querySelector('.gauge-sub');
@@ -696,6 +733,39 @@ function showPlayer(name){
 })();
 
 window.addEventListener('scroll',hideTip,{passive:true});
+
+/* live ticker — a streaming strip of the headline numbers */
+(function(){
+  const t=$('#tickerTrack'); if(!t)return;
+  const sc=(DATA.goalscorers||[]).find(g=>!g.player.startsWith('(other'));
+  const pich=(DATA.pichichi||[])[0];
+  const items=[
+    `<span class="k">PROMOTION</span> <b>${pct(DATA.promotion)}</b>`,
+    `<span class="k">MEAN FINISH</span> <b>${DATA.mean_position.toFixed(1)}</b> / ${DATA.group_size}`,
+    `<span class="k">REACH PLAY-OFF</span> <b>${pct0(DATA.p_playoff_reached)}</b>`,
+    `<span class="k">WIN GROUP</span> <b>${pct(DATA.p_direct)}</b>`,
+    `<span class="k">PROJ. PTS</span> <b>${Math.round(DATA.mean_points)}</b>`,
+    `<span class="k">GOALS</span> <b>${Math.round(DATA.mean_goals_for)}</b>`,
+    sc?`<span class="k">TOP SCORER</span> <b>${sc.player} ~${Math.round(sc.exp_goals)}</b>`:'',
+    pich?`<span class="k">PICHICHI</span> <b>${pich.player_team}</b>`:'',
+    DATA.bootstrap?`<span class="k">90% CI</span> <b>${pct(DATA.bootstrap.ci90[0])}–${pct(DATA.bootstrap.ci90[1])}</b>`:'',
+  ].filter(Boolean).map(h=>`<span class="it">${h}</span>`).join('');
+  t.innerHTML=items+items;  // duplicated for a seamless -50% loop
+})();
+
+/* scroll-reveal every section + hero panels */
+document.querySelectorAll('.section, .hero .card').forEach(reveal);
+
+/* boot sequence: count 0->100 with a sweeping bar, then lift the curtain */
+(function(){
+  const boot=$('#boot'); if(!boot)return;
+  if(RM){ boot.classList.add('done'); return; }
+  const bar=$('#bootBar'), pctn=$('#bootPct'); const t0=performance.now(), dur=1000;
+  const step=t=>{const p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+    bar.style.width=(e*100).toFixed(0)+'%'; pctn.textContent=Math.round(e*100)+'%';
+    if(p<1)requestAnimationFrame(step); else setTimeout(()=>boot.classList.add('done'),180);};
+  requestAnimationFrame(step);
+})();
 </script>
 """
 

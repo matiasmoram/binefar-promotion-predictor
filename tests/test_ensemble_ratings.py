@@ -45,6 +45,18 @@ def test_independent_poisson_still_orders_teams():
     assert tbl.iloc[0]["team"] == "A"
 
 
+def test_bivariate_poisson_recovers_ordering_and_valid_pmf():
+    from binefar_predictor.ratings import BivariatePoissonModel
+    m = _synthetic()
+    bp = BivariatePoissonModel(half_life_days=0, l2=0.01).fit(m)
+    tbl = bp.strength_table()
+    assert tbl.iloc[0]["team"] == "A" and tbl.iloc[-1]["team"] == "D"
+    mat = bp.pmf_grid(bp.attack["A"], bp.defense["B"], bp.attack["B"], bp.defense["A"])
+    assert abs(mat.sum() - 1.0) < 1e-9 and (mat >= 0).all()
+    ph, pd_, pa = bp.win_probabilities("A", "D")
+    assert abs(ph + pd_ + pa - 1.0) < 1e-9 and ph > pa
+
+
 def test_bootstrap_returns_valid_interval():
     from binefar_predictor.ensemble import bootstrap_promotion
     m = _synthetic(n=6)

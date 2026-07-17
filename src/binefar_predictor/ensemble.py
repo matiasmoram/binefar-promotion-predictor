@@ -21,14 +21,15 @@ import pandas as pd
 from scipy.stats import spearmanr
 
 from . import config
-from .ratings import DixonColesModel, EloModel, PiRatingModel
+from .ratings import BivariatePoissonModel, DixonColesModel, EloModel, PiRatingModel
 from .simulate import SeasonSimulator
 
 
 @dataclass
 class EnsembleResult:
     members: dict[str, float]        # member name -> promotion probability
-    mean: float
+    weights: dict[str, float]        # member name -> ensemble weight (sums to 1)
+    mean: float                      # log-loss-weighted mean promotion probability
     min: float
     max: float
     std: float
@@ -36,22 +37,51 @@ class EnsembleResult:
 
     def summary(self) -> str:
         lines = [f"Ensemble promotion probability: {self.mean:.1%} "
-                 f"(range {self.min:.1%}–{self.max:.1%}, sd {self.std:.1%})"]
+                 f"(range {self.min:.1%}–{self.max:.1%}, sd {self.std:.1%}; "
+                 f"log-loss-weighted)"]
         for name, p in self.members.items():
-            lines.append(f"  · {name:28s} {p:.1%}")
+            lines.append(f"  · {name:24s} {p:5.1%}  (w={self.weights.get(name, 0):.2f})")
         lines.append("  strength-ordering agreement (Spearman):")
         for pair, rho in self.strength_agreement.items():
             lines.append(f"    {pair:20s} {rho:+.2f}")
         return "\n".join(lines)
 
 
-def _member_configs() -> dict[str, dict]:
+def _make_model(name: str):
+    """Fresh, unfitted model for an ensemble member name."""
     return {
-        "Dixon-Coles (hl=365d)": {"half_life_days": 365, "l2": 0.05, "fix_rho": None},
-        "Dixon-Coles (hl=180d)": {"half_life_days": 180, "l2": 0.05, "fix_rho": None},
-        "Dixon-Coles (hl=730d)": {"half_life_days": 730, "l2": 0.05, "fix_rho": None},
-        "Independent Poisson": {"half_life_days": 365, "l2": 0.05, "fix_rho": 0.0},
-    }
+        "Dixon-Coles (hl=365d)": lambda: DixonColesModel(half_life_days=365, l2=0.05),
+        "Dixon-Coles (hl=180d)": lambda: DixonColesModel(half_life_days=180, l2=0.05),
+        "Dixon-Coles (hl=730d)": lambda: DixonColesModel(half_life_days=730, l2=0.05),
+        "Independent Poisson": lambda: DixonColesModel(half_life_days=365, l2=0.05, fix_rho=0.0),
+        "Bivariate Poisson": lambda: BivariatePoissonModel(half_life_days=365, l2=0.05),
+    }[name]()
+
+
+_MEMBER_NAMES = ["Dixon-Coles (hl=365d)", "Dixon-Coles (hl=180d)",
+                 "Dixon-Coles (hl=730d)", "Independent Poisson", "Bivariate Poisson"]
+
+
+def _holdout_logloss(name: str, matches: pd.DataFrame) -> float:
+    """Out-of-sample W/D/L log-loss for a member: fit on all seasons but the
+    last, score the last season. Lower = better; used for ensemble weighting."""
+    last = matches.sort_values("timestamp")["season"].iloc[-1]
+    start = matches[matches["season"] == last]["timestamp"].min()
+    train = matches[matches["timestamp"] < start]
+    test = matches[matches["season"] == last]
+    if len(train) < 300 or test.empty:
+        return 1.0986  # ln(3): a uniform-guess fallback
+    model = _make_model(name).fit(train, ref_timestamp=start)
+    ll, n = 0.0, 0
+    for r in test.itertuples():
+        if r.home not in model.attack or r.away not in model.attack:
+            continue
+        ph, pdr, pa = model.win_probabilities(r.home, r.away)
+        gd = r.home_goals - r.away_goals
+        p = ph if gd > 0 else (pdr if gd == 0 else pa)
+        ll += -np.log(min(max(p, 1e-15), 1.0))
+        n += 1
+    return ll / n if n else 1.0986
 
 
 def bootstrap_promotion(
@@ -99,15 +129,23 @@ def run_ensemble(
     n_sims: int = 25_000,
 ) -> EnsembleResult:
     members: dict[str, float] = {}
+    loglosses: dict[str, float] = {}
     primary_dc = None
-    for name, cfg in _member_configs().items():
-        model = DixonColesModel(**cfg).fit(matches)
+    for name in _MEMBER_NAMES:
+        model = _make_model(name).fit(matches)
         if primary_dc is None:
             primary_dc = model
         res = SeasonSimulator(model, group, target=target).run(n_sims=n_sims)
         members[name] = res.p_promotion
+        loglosses[name] = _holdout_logloss(name, matches)
 
     probs = np.array(list(members.values()))
+    # weight members by out-of-sample skill: softmax(-logloss / tau)
+    ll = np.array([loglosses[n] for n in members])
+    w = np.exp(-(ll - ll.min()) / 0.02)
+    w = w / w.sum()
+    weights = {n: float(wi) for n, wi in zip(members, w)}
+    weighted_mean = float(np.sum(probs * w))
 
     # strength-ordering agreement across three independent rating systems
     elo = EloModel().fit(matches)
@@ -125,7 +163,8 @@ def run_ensemble(
 
     return EnsembleResult(
         members=members,
-        mean=float(probs.mean()),
+        weights=weights,
+        mean=weighted_mean,
         min=float(probs.min()),
         max=float(probs.max()),
         std=float(probs.std()),

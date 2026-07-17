@@ -31,6 +31,7 @@ class PredictionReport:
     promotion_probability: float          # ensemble mean
     promotion_range: list[float]          # [min, max] across ensemble members
     ensemble_members: dict
+    ensemble_weights: dict
     p_direct: float
     p_playoff_reached: float
     p_playoff_won: float
@@ -242,6 +243,7 @@ def run_prediction(
         n_matches_trained=len(matches), n_seasons=int(n_seasons),
         promotion_probability=ens.mean, promotion_range=[ens.min, ens.max],
         ensemble_members=ens.members,
+        ensemble_weights=ens.weights,
         p_direct=result.p_direct, p_playoff_reached=result.p_playoff_reached,
         p_playoff_won=result.p_playoff_won, monte_carlo_se=result.se,
         mean_position=result.mean_position, mean_points=result.mean_points,
@@ -325,10 +327,13 @@ def _write_markdown(report, model, result, path: Path) -> None:
         f"- Pre-season strength rank in group: **{report.strength_rank_in_group}** "
         f"of {len(report.group)}", "",
         "## Ensemble members", "",
-        "| Model variant | Promotion prob |", "|---|---|",
+        "Members are weighted by out-of-sample (last-season) W/D/L log-loss, so "
+        "the better-calibrated models count more toward the headline number.", "",
+        "| Model variant | Promotion prob | Weight |", "|---|---|---|",
     ]
     for name, p in report.ensemble_members.items():
-        L.append(f"| {name} | {p:.1%} |")
+        w = report.ensemble_weights.get(name, 0)
+        L.append(f"| {name} | {p:.1%} | {w:.0%} |")
     if report.strength_agreement:
         L += ["", "Cross-model strength-ordering agreement (Spearman): "
               + ", ".join(f"{k} {v:+.2f}" for k, v in report.strength_agreement.items())]

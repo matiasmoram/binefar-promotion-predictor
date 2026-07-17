@@ -112,43 +112,21 @@ class SeasonSimulator:
         self.fixtures = double_round_robin(self.teams)
 
     # -- scoreline model with cold-start override -------------------------- #
-    def _expected_goals(self, home: str, away: str) -> tuple[float, float]:
-        import math
-
-        lam = math.exp(
-            self.model.mu + self.model.home + self._attack[home] + self._defense[away]
+    def _scoreline_matrix(self, home: str, away: str) -> np.ndarray:
+        """Delegate to the model's pmf_grid, injecting cold-start-adjusted
+        attack/defense so any scoreline model (Dixon-Coles, bivariate-Poisson…)
+        plugs in interchangeably."""
+        return self.model.pmf_grid(
+            self._attack[home], self._defense[away],
+            self._attack[away], self._defense[home],
         )
-        mu_ = math.exp(self.model.mu + self._attack[away] + self._defense[home])
-        return lam, mu_
 
     def _scoreline_pmf_flat(self, home: str, away: str) -> np.ndarray:
-        from scipy.stats import poisson
-
-        lam, mu_ = self._expected_goals(home, away)
-        gm = self.model.max_goals
-        xs = np.arange(gm + 1)
-        mat = np.outer(poisson.pmf(xs, lam), poisson.pmf(xs, mu_))
-        mat[0, 0] *= 1 - lam * mu_ * self.model.rho
-        mat[0, 1] *= 1 + lam * self.model.rho
-        mat[1, 0] *= 1 + mu_ * self.model.rho
-        mat[1, 1] *= 1 - self.model.rho
-        mat = np.clip(mat, 0, None)
-        return (mat / mat.sum()).ravel()
+        return self._scoreline_matrix(home, away).ravel()
 
     def _pairwise_home_win(self, home: str, away: str) -> tuple[float, float, float]:
         """(home win, draw, away win) for a single play-off match."""
-        from scipy.stats import poisson
-
-        lam, mu_ = self._expected_goals(home, away)
-        gm = self.model.max_goals
-        xs = np.arange(gm + 1)
-        mat = np.outer(poisson.pmf(xs, lam), poisson.pmf(xs, mu_))
-        mat[0, 0] *= 1 - lam * mu_ * self.model.rho
-        mat[0, 1] *= 1 + lam * self.model.rho
-        mat[1, 0] *= 1 + mu_ * self.model.rho
-        mat[1, 1] *= 1 - self.model.rho
-        mat = np.clip(mat, 0, None)
-        mat /= mat.sum()
+        mat = self._scoreline_matrix(home, away)
         p_home = np.tril(mat, -1).sum()
         p_draw = np.trace(mat)
         return float(p_home), float(p_draw), float(1 - p_home - p_draw)

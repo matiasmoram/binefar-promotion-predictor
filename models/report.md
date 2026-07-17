@@ -1,10 +1,10 @@
 # CD Binéfar — promotion forecast, 26/27
 
-**Generated:** 2026-07-17T10:08:03.118173+00:00
+**Generated:** 2026-07-17T15:22:09.108944+00:00
 
 ## Headline
 
-> **7.8%** probability of promotion (ensemble range **6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50,000 sims).
+> **7.7%** probability of promotion (ensemble range **6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50,000 sims).
 
 > Accounting for **parameter uncertainty** (bootstrap, 40 resamples), the honest 90% interval is **1.4%–22.6%** (mean 9.6%) — much wider, because tier-5 ratings are estimated from small samples. Read the headline as a central estimate, not a precise number.
 
@@ -13,7 +13,7 @@
 | Direct (champion) | 4.3% |
 | Reached play-off (2nd–5th) | 53.4% |
 | Won territorial play-off | 8.9% |
-| **Promoted (any route)** | **7.8%** |
+| **Promoted (any route)** | **7.7%** |
 
 - Mean finishing position: **5.5** of 18
 - Mean points: **53.9**; mean goals scored: **52.6**
@@ -21,12 +21,15 @@
 
 ## Ensemble members
 
-| Model variant | Promotion prob |
-|---|---|
-| Dixon-Coles (hl=365d) | 7.8% |
-| Dixon-Coles (hl=180d) | 6.6% |
-| Dixon-Coles (hl=730d) | 8.9% |
-| Independent Poisson | 7.9% |
+Members are weighted by out-of-sample (last-season) W/D/L log-loss, so the better-calibrated models count more toward the headline number.
+
+| Model variant | Promotion prob | Weight |
+|---|---|---|
+| Dixon-Coles (hl=365d) | 7.8% | 21% |
+| Dixon-Coles (hl=180d) | 6.6% | 23% |
+| Dixon-Coles (hl=730d) | 8.9% | 13% |
+| Independent Poisson | 7.9% | 22% |
+| Bivariate Poisson | 7.8% | 21% |
 
 Cross-model strength-ordering agreement (Spearman): Dixon-Coles vs Elo +0.90, Dixon-Coles vs pi +0.88, Elo vs pi +0.97
 
@@ -102,17 +105,17 @@ Teams promoted up from Regional Preferente Aragón (real names where resolvable;
 | Player (team) | Exp goals | P(pichichi) |
 |---|---|---|
 | Youssef (CA Monzón) | 20.93 | 81% |
-| Chicho (CD Binéfar) | 10.24 | 3% |
+| De Mesa (CD Binéfar) | 10.24 | 3% |
 | Alberto (Andorra CF) | 10.49 | 3% |
-| De Mesa (CD Binéfar) | 10.26 | 3% |
+| Chicho (CD Binéfar) | 10.26 | 3% |
 | Bernárdez (CA Monzón) | 9.81 | 3% |
-| Tapia (CD Cuarte) | 8.67 | 1% |
 | Jorge (CD Cuarte) | 8.67 | 1% |
+| Tapia (CD Cuarte) | 8.67 | 1% |
 | Rotellar (CD Caspe) | 7.66 | 0% |
 | Seral (SD Huesca B) | 6.51 | 0% |
 | Hugo (CF Epila) | 6.44 | 0% |
 | Hamza (CD La Almunia) | 6.79 | 0% |
-| Balué (CDJ Tamarite) | 5.82 | 0% |
+| Flo (CDJ Tamarite) | 5.82 | 0% |
 
 ## Anytime-scorer probability (typical match)
 

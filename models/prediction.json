@@ -1,10 +1,10 @@
 {
   "club": "CD Binéfar",
   "target_season": "26/27",
-  "generated_at": "2026-07-17T10:08:03.118173+00:00",
+  "generated_at": "2026-07-17T15:22:09.108944+00:00",
   "n_matches_trained": 2860,
   "n_seasons": 9,
-  "promotion_probability": 0.07799,
+  "promotion_probability": 0.07689077763304111,
   "promotion_range": [
     0.06624,
     0.08868
@@ -13,7 +13,15 @@
     "Dixon-Coles (hl=365d)": 0.07776,
     "Dixon-Coles (hl=180d)": 0.06624,
     "Dixon-Coles (hl=730d)": 0.08868,
-    "Independent Poisson": 0.07928
+    "Independent Poisson": 0.07928,
+    "Bivariate Poisson": 0.07828
+  },
+  "ensemble_weights": {
+    "Dixon-Coles (hl=365d)": 0.2136228937772076,
+    "Dixon-Coles (hl=180d)": 0.2325011708195958,
+    "Dixon-Coles (hl=730d)": 0.12556187552272033,
+    "Independent Poisson": 0.21533212903691745,
+    "Bivariate Poisson": 0.2129819308435587
   },
   "p_direct": 0.04328,
   "p_playoff_reached": 0.53378,
@@ -987,7 +995,7 @@
       "p_pichichi": 0.809
     },
     {
-      "player_team": "Chicho (CD Binéfar)",
+      "player_team": "De Mesa (CD Binéfar)",
       "exp_goals": 10.24,
       "p_pichichi": 0.033
     },
@@ -997,7 +1005,7 @@
       "p_pichichi": 0.031
     },
     {
-      "player_team": "De Mesa (CD Binéfar)",
+      "player_team": "Chicho (CD Binéfar)",
       "exp_goals": 10.26,
       "p_pichichi": 0.03
     },
@@ -1007,12 +1015,12 @@
       "p_pichichi": 0.028
     },
     {
-      "player_team": "Tapia (CD Cuarte)",
+      "player_team": "Jorge (CD Cuarte)",
       "exp_goals": 8.67,
       "p_pichichi": 0.013
     },
     {
-      "player_team": "Jorge (CD Cuarte)",
+      "player_team": "Tapia (CD Cuarte)",
       "exp_goals": 8.67,
       "p_pichichi": 0.012
     },
@@ -1037,32 +1045,32 @@
       "p_pichichi": 0.003
     },
     {
+      "player_team": "Flo (CDJ Tamarite)",
+      "exp_goals": 5.82,
+      "p_pichichi": 0.002
+    },
+    {
+      "player_team": "Alexis (CDJ Tamarite)",
+      "exp_goals": 5.8,
+      "p_pichichi": 0.002
+    },
+    {
       "player_team": "Balué (CDJ Tamarite)",
       "exp_goals": 5.82,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Flo (CDJ Tamarite)",
-      "exp_goals": 5.8,
-      "p_pichichi": 0.002
-    },
-    {
-      "player_team": "Alexis (CDJ Tamarite)",
-      "exp_goals": 5.82,
-      "p_pichichi": 0.002
-    },
-    {
-      "player_team": "Vera (CD Cuarte)",
+      "player_team": "Peralta (CD Cuarte)",
       "exp_goals": 5.83,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Solá (SD Huesca B)",
+      "player_team": "Calvo (SD Huesca B)",
       "exp_goals": 5.7,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Calvo (SD Huesca B)",
+      "player_team": "Solá (SD Huesca B)",
       "exp_goals": 5.7,
       "p_pichichi": 0.002
     },
@@ -1084,49 +1092,49 @@
   ],
   "goleadores_crosscheck": [
     {
+      "rank": 4,
+      "player": "Chicho",
+      "team": "CD Binéfar",
+      "goals": 14
+    },
+    {
       "rank": 5,
       "player": "De Mesa",
       "team": "CD Binéfar",
       "goals": 14
     },
     {
-      "rank": 6,
-      "player": "Chicho",
-      "team": "CD Binéfar",
-      "goals": 14
-    },
-    {
-      "rank": 31,
+      "rank": 26,
       "player": "Querol",
       "team": "CD Binéfar",
       "goals": 6
     },
     {
-      "rank": 41,
+      "rank": 46,
       "player": "Cesc",
       "team": "CD Binéfar",
       "goals": 5
     },
     {
-      "rank": 67,
+      "rank": 52,
       "player": "Rico",
       "team": "CD Binéfar",
       "goals": 4
     },
     {
-      "rank": 76,
-      "player": "Genís",
-      "team": "CD Binéfar",
-      "goals": 3
-    },
-    {
-      "rank": 90,
+      "rank": 85,
       "player": "Samitier",
       "team": "CD Binéfar",
       "goals": 3
     },
     {
-      "rank": 120,
+      "rank": 91,
+      "player": "Genís",
+      "team": "CD Binéfar",
+      "goals": 3
+    },
+    {
+      "rank": 99,
       "player": "Torguet",
       "team": "CD Binéfar",
       "goals": 2
