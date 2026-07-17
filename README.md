@@ -18,9 +18,11 @@ scrape (Sofascore + Futbolme + Transfermarkt + Regional Preferente)
 > ### 🎯 Headline (2026-07-14, season 26/27)
 > **~8% probability of promotion** to Segunda Federación
 > (**ensemble range 6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50k sims).
-> Accounting for **parameter uncertainty** (bootstrap), the honest 90% interval
-> is **~1.5%–23%** — tier-5 ratings come from small samples, so the true spread is
-> wide. Mean projected finish **5.5th of 18**; ~53% chance of reaching the play-off.
+> Accounting for **rating-estimation uncertainty** (bootstrap), the
+> parameter-uncertainty 90% interval is **~1.5%–23%** — tier-5 ratings come from
+> small samples. That band is estimation error only; the play-off conversion rate,
+> newcomer priors and the unpublished 26/27 group widen it further (see Sensitivity).
+> Mean projected finish **5.5th of 18**; ~53% chance of reaching the play-off.
 > Predicted top scorer: **Adrià de Mesa (~12 goals)**.
 >
 > Full breakdown & plots: [`models/report.md`](models/report.md).

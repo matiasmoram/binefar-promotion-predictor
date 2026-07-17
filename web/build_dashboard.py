@@ -476,7 +476,7 @@ if(DATA.backtest){const b=DATA.backtest;$('#btline').textContent=`Walk-forward l
     ? ` <b>${scorer.player}</b> is the favourite for top scorer (~${Math.round(scorer.exp_goals)} goals).`
     : '';
   const band = DATA.bootstrap
-    ? ` It is a low-confidence call: allowing for small-sample noise, the honest range is <b>${pct(DATA.bootstrap.ci90[0])}–${pct(DATA.bootstrap.ci90[1])}</b>.`
+    ? ` It is a low-confidence call: from rating-estimation error alone the range is <b>${pct(DATA.bootstrap.ci90[0])}–${pct(DATA.bootstrap.ci90[1])}</b> (wider still once the play-off conversion and unknown newcomers are added).`
     : '';
   $('#lede').innerHTML =
     `<b>${DATA.club}</b> are projected to finish with a mean of <b>${DATA.mean_position.toFixed(1)}` +

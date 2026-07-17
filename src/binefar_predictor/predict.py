@@ -311,10 +311,12 @@ def _write_markdown(report, model, result, path: Path) -> None:
     ]
     if report.bootstrap:
         b = report.bootstrap
-        L += [f"> Accounting for **parameter uncertainty** (bootstrap, {b['n_boot']} "
-              f"resamples), the honest 90% interval is **{b['ci90'][0]:.1%}–{b['ci90'][1]:.1%}** "
-              f"(mean {b['mean']:.1%}) — much wider, because tier-5 ratings are estimated "
-              f"from small samples. Read the headline as a central estimate, not a precise number.", ""]
+        L += [f"> Accounting for **rating-estimation uncertainty** (bootstrap, {b['n_boot']} "
+              f"resamples), the parameter-uncertainty 90% interval is **{b['ci90'][0]:.1%}–{b['ci90'][1]:.1%}** "
+              f"(mean {b['mean']:.1%}) — much wider, because tier-5 ratings come from small "
+              f"samples. This band covers estimation error only; the play-off conversion rate, "
+              f"newcomer priors and the unpublished 26/27 group add further uncertainty on top "
+              f"(see Sensitivity). Read the headline as a central estimate, not a precise number.", ""]
     L += [
         "| Route | Probability |", "|---|---|",
         f"| Direct (champion) | {report.p_direct:.1%} |",

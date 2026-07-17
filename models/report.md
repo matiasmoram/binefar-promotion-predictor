@@ -6,7 +6,7 @@
 
 > **7.7%** probability of promotion (ensemble range **6.6%–8.9%**; primary-model Monte-Carlo SE ±0.1%, 50,000 sims).
 
-> Accounting for **parameter uncertainty** (bootstrap, 40 resamples), the honest 90% interval is **1.4%–22.6%** (mean 9.6%) — much wider, because tier-5 ratings are estimated from small samples. Read the headline as a central estimate, not a precise number.
+> Accounting for **rating-estimation uncertainty** (bootstrap, 40 resamples), the parameter-uncertainty 90% interval is **1.4%–22.6%** (mean 9.6%) — much wider, because tier-5 ratings come from small samples. This band covers estimation error only; the play-off conversion rate, newcomer priors and the unpublished 26/27 group add further uncertainty on top (see Sensitivity). Read the headline as a central estimate, not a precise number.
 
 | Route | Probability |
 |---|---|
