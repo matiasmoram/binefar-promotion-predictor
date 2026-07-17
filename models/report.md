@@ -1,6 +1,6 @@
 # CD Binéfar — promotion forecast, 26/27
 
-**Generated:** 2026-07-14T14:44:06.943920+00:00
+**Generated:** 2026-07-17T10:08:03.118173+00:00
 
 ## Headline
 

@@ -1,7 +1,7 @@
 {
   "club": "CD Binéfar",
   "target_season": "26/27",
-  "generated_at": "2026-07-14T14:44:06.943920+00:00",
+  "generated_at": "2026-07-17T10:08:03.118173+00:00",
   "n_matches_trained": 2860,
   "n_seasons": 9,
   "promotion_probability": 0.07799,
@@ -1052,17 +1052,17 @@
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Peralta (CD Cuarte)",
+      "player_team": "Vera (CD Cuarte)",
       "exp_goals": 5.83,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Calvo (SD Huesca B)",
+      "player_team": "Solá (SD Huesca B)",
       "exp_goals": 5.7,
       "p_pichichi": 0.002
     },
     {
-      "player_team": "Solá (SD Huesca B)",
+      "player_team": "Calvo (SD Huesca B)",
       "exp_goals": 5.7,
       "p_pichichi": 0.002
     },
@@ -1096,13 +1096,13 @@
       "goals": 14
     },
     {
-      "rank": 33,
+      "rank": 31,
       "player": "Querol",
       "team": "CD Binéfar",
       "goals": 6
     },
     {
-      "rank": 42,
+      "rank": 41,
       "player": "Cesc",
       "team": "CD Binéfar",
       "goals": 5
@@ -1115,18 +1115,18 @@
     },
     {
       "rank": 76,
-      "player": "Samitier",
-      "team": "CD Binéfar",
-      "goals": 3
-    },
-    {
-      "rank": 82,
       "player": "Genís",
       "team": "CD Binéfar",
       "goals": 3
     },
     {
-      "rank": 123,
+      "rank": 90,
+      "player": "Samitier",
+      "team": "CD Binéfar",
+      "goals": 3
+    },
+    {
+      "rank": 120,
       "player": "Torguet",
       "team": "CD Binéfar",
       "goals": 2
@@ -1217,6 +1217,63 @@
       "parameter": "national_conversion",
       "value": 0.7,
       "p_promotion": 0.1042
+    }
+  ],
+  "whatif": [
+    {
+      "shift": -0.4,
+      "p_promotion": 0.0022,
+      "mean_position": 10.99
+    },
+    {
+      "shift": -0.3,
+      "p_promotion": 0.0068,
+      "mean_position": 9.4
+    },
+    {
+      "shift": -0.2,
+      "p_promotion": 0.0175,
+      "mean_position": 7.95
+    },
+    {
+      "shift": -0.1,
+      "p_promotion": 0.0418,
+      "mean_position": 6.58
+    },
+    {
+      "shift": 0.0,
+      "p_promotion": 0.0774,
+      "mean_position": 5.38
+    },
+    {
+      "shift": 0.1,
+      "p_promotion": 0.1368,
+      "mean_position": 4.36
+    },
+    {
+      "shift": 0.2,
+      "p_promotion": 0.2288,
+      "mean_position": 3.52
+    },
+    {
+      "shift": 0.3,
+      "p_promotion": 0.3387,
+      "mean_position": 2.83
+    },
+    {
+      "shift": 0.4,
+      "p_promotion": 0.4704,
+      "mean_position": 2.29
+    },
+    {
+      "shift": 0.5,
+      "p_promotion": 0.6014,
+      "mean_position": 1.86
+    },
+    {
+      "shift": 0.6,
+      "p_promotion": 0.724,
+      "mean_position": 1.55
     }
   ],
   "form": {

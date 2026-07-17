@@ -51,6 +51,7 @@ class PredictionReport:
     pichichi_race: list[dict] = field(default_factory=list)
     goleadores_crosscheck: list[dict] = field(default_factory=list)
     sensitivity: list[dict] = field(default_factory=list)
+    whatif: list[dict] = field(default_factory=list)
     form: dict = field(default_factory=dict)
     backtest: dict | None = None
     bootstrap: dict | None = None
@@ -188,15 +189,16 @@ def run_prediction(
             _say(f"      (goalscorer step skipped: {exc})")
 
     # ---- sensitivity + form ------------------------------------------- #
-    sensitivity_records, form = [], {}
+    sensitivity_records, whatif_records, form = [], [], {}
     if include_sensitivity:
-        _say("[6/8] Sensitivity analysis + form tables …")
+        _say("[6/8] Sensitivity + what-if curve + form tables …")
         try:
-            from .analysis import sensitivity as _sens, form_tables
+            from .analysis import sensitivity as _sens, whatif_curve, form_tables
             sensitivity_records = _sens(matches, latest, target=target, n_sims=12_000).to_dict("records")
+            whatif_records = whatif_curve(matches, latest, target=target, n_sims=12_000)
             form = form_tables(matches, target)
         except Exception as exc:
-            notes.append(f"Sensitivity/form failed: {exc}")
+            notes.append(f"Sensitivity/what-if/form failed: {exc}")
 
     # ---- backtest ------------------------------------------------------ #
     backtest_dict = None
@@ -262,7 +264,7 @@ def run_prediction(
         },
         squad=squad_records, goalscorers=goalscorers, anytime_scorers=anytime,
         pichichi_race=pichichi, goleadores_crosscheck=crosscheck,
-        sensitivity=sensitivity_records, form=form,
+        sensitivity=sensitivity_records, whatif=whatif_records, form=form,
         backtest=backtest_dict, bootstrap=bootstrap_dict, notes=notes,
     )
     config.MODELS_DIR.mkdir(parents=True, exist_ok=True)

@@ -81,6 +81,7 @@ def build() -> None:
                         if not g["player"].startswith("(other")],
         "pichichi": pred.get("pichichi_race", []),
         "sensitivity": pred.get("sensitivity", []),
+        "whatif": pred.get("whatif", []),
         "backtest": pred.get("backtest"),
         "bootstrap": pred.get("bootstrap"),
         "model_params": pred.get("model_params", {}),
@@ -276,6 +277,18 @@ table.tbl td.strip{padding:6px 8px}
 .agree{display:flex; gap:8px; flex-wrap:wrap; margin-top:12px}
 .chip{font-size:12px; background:var(--card2); border:1px solid var(--line); border-radius:999px; padding:5px 11px; color:var(--muted)}
 .chip b{color:var(--good)}
+/* what-if slider */
+.whatif{display:grid; grid-template-columns:minmax(200px,300px) 1fr; gap:22px; align-items:center}
+@media(max-width:680px){.whatif{grid-template-columns:1fr}}
+.whatif .readout{text-align:center}
+.whatif .readout .big{font-family:var(--display); font-size:52px; font-weight:700; line-height:1; color:var(--accent)}
+.whatif .readout .lbl{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-top:4px}
+.whatif .readout .pos{font-size:13px; color:var(--muted); margin-top:8px}
+.whatif .ctrl{display:flex; flex-direction:column; gap:10px}
+.whatif input[type=range]{width:100%; accent-color:var(--accent); height:6px}
+.whatif .scale{display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:var(--muted)}
+.whatif .shiftlbl{font-family:var(--mono); font-size:12px; color:var(--fg); text-align:center}
+.whatif .shiftlbl b{color:var(--accent)}
 .sens{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:4px}
 @media(max-width:720px){.sens{grid-template-columns:repeat(2,1fr)}}
 .sens .sp{background:var(--card2); border-radius:12px; padding:12px}
@@ -373,6 +386,13 @@ footer .cols{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin
     <div class="card chart-card">
       <div class="section-h"><h2>Projected final table</h2><span class="note">finishing-position probability heatmap · 50k simulated seasons · click headers to sort</span></div>
       <div style="overflow-x:auto"><table class="tbl" id="projtable"></table></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card chart-card">
+      <div class="section-h"><h2>What if the squad were stronger?</h2><span class="note">drag to adjust CD Binéfar's net strength vs last season · the model re-scores promotion</span></div>
+      <div class="whatif" id="whatif"></div>
     </div>
   </section>
 
@@ -601,6 +621,35 @@ function showPlayer(name){
       c.addEventListener('mousemove',e=>showTip(e,c.dataset.tip)); c.addEventListener('mouseleave',hideTip);});
   }
   render();
+})();
+
+/* what-if slider — interpolates the server-precomputed strength curve */
+(function(){
+  const curve=(DATA.whatif||[]).slice().sort((a,b)=>a.shift-b.shift);
+  const host=$('#whatif'); if(curve.length<2){host.style.display='none';return;}
+  const lo=curve[0].shift, hi=curve[curve.length-1].shift;
+  const interp=(x,key)=>{
+    if(x<=lo)return curve[0][key]; if(x>=hi)return curve[curve.length-1][key];
+    for(let i=0;i<curve.length-1;i++){const a=curve[i],b=curve[i+1];
+      if(x>=a.shift&&x<=b.shift){const t=(x-a.shift)/(b.shift-a.shift);return a[key]+t*(b[key]-a[key]);}}
+    return curve[0][key];
+  };
+  host.innerHTML=`
+    <div class="readout" aria-live="polite">
+      <div class="big" id="wiP">–</div><div class="lbl">promotion prob</div>
+      <div class="pos" id="wiPos"></div>
+    </div>
+    <div class="ctrl">
+      <input type="range" id="wiRange" min="${lo}" max="${hi}" step="0.01" value="0"
+        aria-label="Squad strength adjustment">
+      <div class="scale"><span>weaker (${lo.toFixed(1)})</span><span>as last season</span><span>stronger (+${hi.toFixed(1)})</span></div>
+      <div class="shiftlbl">net-strength shift <b id="wiShift">0.00</b> (log-rate; +0.3 ≈ a third more scoring edge)</div>
+    </div>`;
+  const upd=()=>{const x=parseFloat($('#wiRange').value);
+    $('#wiP').textContent=pct(interp(x,'p_promotion'));
+    $('#wiPos').textContent='mean finish '+interp(x,'mean_position').toFixed(1);
+    $('#wiShift').textContent=(x>=0?'+':'')+x.toFixed(2);};
+  $('#wiRange').addEventListener('input',upd); upd();
 })();
 
 /* sensitivity small multiples */
