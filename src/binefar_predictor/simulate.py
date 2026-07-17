@@ -81,7 +81,6 @@ class SeasonSimulator:
         target: str = config.CLUB_NAME,
         newcomer_penalty: float = config.NEWCOMER_NET_STRENGTH_PENALTY,
         national_conversion: float = config.NATIONAL_PHASE_CONVERSION,
-        target_strength_shift: float = 0.0,
         seed: int = 20262027,
     ) -> None:
         self.model = model
@@ -109,12 +108,6 @@ class SeasonSimulator:
             else:
                 self._attack[t] = -newcomer_penalty / 2.0
                 self._defense[t] = +newcomer_penalty / 2.0
-
-        # "What-if" hook: nudge the target's net strength (attack up, defense
-        # down, split evenly) to model a stronger/weaker squad than history implies.
-        if target_strength_shift:
-            self._attack[self.team_name] += target_strength_shift / 2.0
-            self._defense[self.team_name] -= target_strength_shift / 2.0
 
         self.fixtures = double_round_robin(self.teams)
 

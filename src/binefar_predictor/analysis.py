@@ -67,37 +67,6 @@ def form_tables(matches: pd.DataFrame, team: str) -> dict:
     }
 
 
-def whatif_curve(
-    matches: pd.DataFrame,
-    latest_standings: pd.DataFrame,
-    target: str = config.CLUB_NAME,
-    shifts: list[float] | None = None,
-    n_sims: int = 12_000,
-) -> list[dict]:
-    """Promotion probability vs a squad-strength adjustment of the target club.
-
-    Drives the dashboard "what-if" slider: how would a stronger/weaker Binéfar
-    squad than last season's form implies change the promotion odds? Each point
-    shifts the club's net Dixon-Coles rating by ``delta`` and re-simulates.
-    """
-    from . import data as _data
-
-    shifts = shifts if shifts is not None else [round(x / 10, 2) for x in range(-4, 7)]
-    group = _data.project_target_group(latest_standings)
-    model = DixonColesModel(half_life_days=365, l2=0.05).fit(matches)
-    curve = []
-    for d in shifts:
-        res = SeasonSimulator(
-            model, group, target=target, target_strength_shift=d
-        ).run(n_sims=n_sims)
-        curve.append({
-            "shift": d,
-            "p_promotion": round(res.p_promotion, 4),
-            "mean_position": round(res.mean_position, 2),
-        })
-    return curve
-
-
 def sensitivity(
     matches: pd.DataFrame,
     latest_standings: pd.DataFrame,
